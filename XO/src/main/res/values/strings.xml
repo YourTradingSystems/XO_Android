@@ -1,10 +1,21 @@
 <resources>
     <string name="app_name">XO</string>
-    <string name="app_id">111039763950</string>
+
 
     <!--Main Screen Buttons text-->
     <string name="button_one_player_string">1 Player</string>
     <string name="button_two_player_string">2 Player</string>
     <string name="button_online_string">Play Online</string>
     <string name="button_about_screen">About</string>
+
+    <!--Game Service String-->
+    <string name="gamehelper_sign_in_failed">Failed to sign in. Please check your network connection and try again.</string>
+    <string name="gamehelper_app_misconfigured">The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.</string>
+    <string name="gamehelper_license_failed">License check failed.</string>
+    <string name="gamehelper_unknown_error">Unknown error.</string>
+
+    <!--Notification Message-->
+
+    <string name="please_login_string">Please Log In</string>
+
 </resources>
