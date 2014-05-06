@@ -6,11 +6,12 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.mobilez365.xo.LifecycleBaseActivity;
 
 /**
  * Created by BruSD on 05.05.2014.
  */
-public abstract class BaseGameActivity extends FragmentActivity implements
+public abstract class BaseGameActivity extends LifecycleBaseActivity implements
         GameHelper.GameHelperListener {
     // The game helper object. This class is mainly a wrapper around this object.
     protected GameHelper mHelper;

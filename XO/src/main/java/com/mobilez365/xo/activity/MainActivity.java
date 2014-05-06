@@ -1,21 +1,16 @@
 package com.mobilez365.xo.activity;
 
-import android.app.Activity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Game;
-import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.mobilez365.xo.GameServiceUtil.BaseGameActivity;
 import com.mobilez365.xo.R;
-
-import org.w3c.dom.Text;
+import com.mobilez365.xo.SoundManager;
 
 
 /**
@@ -64,7 +59,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 break;
             }
             case R.id.button_online_main_activity:{
-                //TODO: Open Online  Game
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             }
 

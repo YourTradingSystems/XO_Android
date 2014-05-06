@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/settings_sound_category_title">
+        <CheckBoxPreference
+            android:title="@string/settings_sound_category_music_title"
+            android:defaultValue="false"
+            android:summary="@string/settings_sound_category_music_description"
+            android:key="music_enabled" />
+        <CheckBoxPreference
+            android:title="@string/settings_sound_category_sound_title"
+            android:defaultValue="false"
+            android:summary="@string/settings_sound_category_sound_description"
+            android:key="sound_enabled" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_notification_category_title">
+        <CheckBoxPreference
+            android:title="@string/settings_notification_category_push_title"
+            android:defaultValue="true"
+            android:summary="@string/settings_notification_category_push_description"
+            android:key="push_enabled" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

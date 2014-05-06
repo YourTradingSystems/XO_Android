@@ -96,7 +96,7 @@ class GameHelperUtils {
         Log.w("GameHelper", "**** (1) Your package name and certificate fingerprint do not match");
         Log.w("GameHelper", "****     the client ID you registered in Developer Console.");
         Log.w("GameHelper", "**** (2) Your App ID was incorrectly entered.");
-        Log.w("GameHelper", "**** (3) Your game settings have not been published and you are ");
+        Log.w("GameHelper", "**** (3) Your game user_settings have not been published and you are ");
         Log.w("GameHelper", "****     trying to log in with an account that is not listed as");
         Log.w("GameHelper", "****     a test account.");
         Log.w("GameHelper", "****");
