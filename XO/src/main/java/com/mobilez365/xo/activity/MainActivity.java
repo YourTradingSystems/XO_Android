@@ -28,8 +28,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         initAllView();
     }
 
-    private void initAllView(){
-        //Buttons
+    private void initAllView() {
+
         onePlayerButton = (TextView) findViewById(R.id.main_activity_one_player);
         twoPlayerButton = (TextView) findViewById(R.id.main_activity_two_player);
         onlinePlayButton = (TextView) findViewById(R.id.main_activity_play_online);
