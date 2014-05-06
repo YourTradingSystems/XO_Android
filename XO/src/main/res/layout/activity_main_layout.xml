@@ -1,34 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="@android:color/white">
-    <TextView
-        android:id="@+id/user_name_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|right"/>
-    <Button
-        android:id="@+id/button_one_player_main_activity"
+    android:background="@drawable/bg">
+
+    <FrameLayout
+        android:id="@+id/main_activity_topPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_one_player_string"/>
-    <Button
-        android:id="@+id/button_two_player_main_activity"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/top_paper_bg">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/main_activity_one_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="9dp"
+                android:textColor="@color/text_color"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:text="@string/main_menu_one_player"/>
+            <TextView
+                android:id="@+id/main_activity_two_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="9dp"
+                android:textColor="@color/text_color"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:text="@string/main_menu_two_player"/>
+            <TextView
+                android:id="@+id/main_activity_play_online"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="9dp"
+                android:textColor="@color/text_color"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:text="@string/main_menu_play_online"/>
+            <TextView
+                android:id="@+id/main_activity_about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="9dp"
+                android:textColor="@color/text_color"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:text="@string/main_menu_about"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/main_activity_bottomPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_two_player_string"/>
-    <Button
-        android:id="@+id/button_online_main_activity"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_paper_bg">
+        
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <Button
+                android:id="@+id/main_activity_leaderboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:drawableTop="@drawable/leaderboard_icon"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/main_menu_leaderboard"/>
+
+            <Button
+                android:id="@+id/main_activity_achievements"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:drawableTop="@drawable/achievement_icon"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/main_menu_achievements"/>
+
+            <Button
+                android:id="@+id/main_activity_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:drawableTop="@drawable/settings_icon"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/main_menu_settings"/>
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/main_activity_adsPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_online_string"/>
-    <Button
-        android:id="@+id/button_about_main_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_about_screen"/>
-</LinearLayout>
+        android:layout_alignParentBottom="true">        
+    </RelativeLayout>
+
+
+</RelativeLayout>

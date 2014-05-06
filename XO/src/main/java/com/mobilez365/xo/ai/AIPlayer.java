@@ -241,5 +241,4 @@ public class AIPlayer {
         return result;
     }
 
-
 }

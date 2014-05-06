@@ -15,10 +15,20 @@
     <string name="gamehelper_unknown_error">Unknown error.</string>
 
     <!--Notification Message-->
-        <string name="please_login_string">Please Log In</string>
+    <string name="please_login_string">Please Log In</string>
 
     <!--Select Online Game-->
     <string name="quick_game_string">Quick Game</string>
     <string name="invite_friend_string">Invite Friend</string>
     <string name="chech_invte_string">Check Invite</string>
+
+    <!--Main Menu-->
+    <string name="main_menu_one_player">1 PLAYER</string>
+    <string name="main_menu_two_player">2 PLAYER</string>
+    <string name="main_menu_play_online">PLAY ONLINE</string>
+    <string name="main_menu_about">ABOUT</string>
+    <string name="main_menu_leaderboard">LEADERBOARD</string>
+    <string name="main_menu_achievements">ACHIEVEMENTS</string>
+    <string name="main_menu_settings">SETTINGS</string>
+
 </resources>
