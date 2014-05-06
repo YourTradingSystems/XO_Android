@@ -63,6 +63,8 @@ public class AIPlayer {
         }
     }
 
+
+
     private Bundle getEasyMove(FieldValue[][] gameField) {
         ArrayList<HashMap<String,Integer>> emptyFields = new ArrayList<>();
 
@@ -99,10 +101,10 @@ public class AIPlayer {
 
 
     private Bundle checkForWin(FieldValue[][] gameField, int countInRowToWin, FieldValue aiSide){
-        // Horizontal
         int size = gameField.length;
 
-        for (int i = 0; i < size; i++){
+        // Horizontal
+        for (int i = 0; i < size; i++) {
             int jStart = -1;
             int jEnd = -1;
 
@@ -124,19 +126,102 @@ public class AIPlayer {
                             if (gameField[i][jEnd + 1] == FieldValue.Empty)
                                 return createMove(i, jEnd + 1);
                     }
+
+                    jStart = -1;
+                    jEnd = -1;
                 }
             }
-
         }
 
-
         // Vertical
+        for (int j = 0; j < size; j++) {
+            int iStart = -1;
+            int iEnd = -1;
+
+            for (int i = 0; i < size; i++) {
+                if (gameField[i][j] == aiSide) {
+                    if (iStart < 0)
+                        iStart = i;
+                    iEnd = i;
+                }
+                else {
+                    if (iStart >= 0 && iEnd >=0 && iEnd - iStart + 1 == countInRowToWin - 1) {
+                        // Can AI do move above of finding block?
+                        if (iStart > 0)
+                            if (gameField[iStart - 1][j] == FieldValue.Empty)
+                                return createMove(iStart - 1 , j);
+
+                        // Can AI do move below of finding block?
+                        if (iEnd < size - 1)
+                            if (gameField[iEnd + 1] [j] == FieldValue.Empty)
+                                return createMove(iEnd + 1, j);
+                    }
+
+                    iStart = -1;
+                    iEnd = -1;
+                }
+            }
+        }
 
         // Diagonal: from left top to right bottom
+        for (int i = 0; i <= size - countInRowToWin + 1; i++) {
+            for (int j = 0; j <= size - countInRowToWin + 1; j++) {
+                if (Math.abs(j-i) <= size - countInRowToWin) {
+
+                    boolean isBlock = true;
+                    for (int shift = 0; shift < countInRowToWin - 1; shift++) {
+                        isBlock = isBlock && gameField[i + shift][j + shift] == aiSide;
+                        if (!isBlock)
+                            break;
+                    }
+
+                    if (isBlock) {
+                        int iStart = i; int jStart = j;
+                        int iEnd = i + countInRowToWin - 2; int jEnd = j + countInRowToWin - 2;
+
+                        // Can AI do move above left of finding block?
+                        if (iStart > 0 && jStart > 0)
+                            if (gameField[iStart - 1][jStart - 1] == FieldValue.Empty)
+                                return createMove(iStart - 1, jStart - 1);
+
+                        // Can AI do move below right of finding block?
+                        if (iEnd < size - 1 && jEnd < size - 1)
+                            if (gameField[iEnd + 1][jEnd + 1] == FieldValue.Empty)
+                                return createMove(iEnd + 1, jEnd + 1);
+                    }
+                }
+            }
+        }
 
         // Diagonal: from right top to left bottom
+        for (int i = 0; i <= size - countInRowToWin + 1; i++)
+            for (int j = size - 1; j >= countInRowToWin - 2; j--) {{
+                if (Math.abs(i + j - size + 1) <= size - countInRowToWin) {
 
+                    boolean isBlock = true;
+                    for (int shift = 0; shift < countInRowToWin - 1; shift++) {
+                        isBlock = isBlock && gameField[i + shift][j - shift] == aiSide;
+                        if (!isBlock)
+                            break;
+                    }
 
+                    if (isBlock) {
+                        int iStart = i; int jStart = j;
+                        int iEnd = i + countInRowToWin - 2; int jEnd = j - countInRowToWin + 2;
+
+                        // Can AI do move above right of finding block?
+                        if (iStart > 0 && jStart < size - 1)
+                            if (gameField[iStart - 1][jStart + 1] == FieldValue.Empty)
+                                return createMove(iStart - 1, jStart + 1);
+
+                        // Can AI do move below left of finding block?
+                        if (iEnd < size - 1 && jEnd > 0)
+                            if (gameField[iEnd + 1][jEnd - 1] == FieldValue.Empty)
+                                return createMove(iEnd + 1, jEnd - 1);
+                    }
+                }
+            }
+        }
 
         return null;
     }
