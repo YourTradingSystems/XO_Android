@@ -23,10 +23,14 @@ public class SoundManager{
     private static MediaPlayer backgroundMusicPlayer;
 
     private static int clickSoundId = -1;
+    private static int winSoundId = -1;
+    private static int loseSoundId = -1;
+    private static int goesXSoundId = -1;
+    private static int goesOSoundId = -1;
 
     private static void initSoundPool() {
         if (soundPool == null)
-            soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+            soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
     }
 
     private static void initSharedPref(Context context){
@@ -37,8 +41,32 @@ public class SoundManager{
 
     private static void initClickSound(Context context) throws IOException {
         AssetManager assetManager = context.getAssets();
-        AssetFileDescriptor descriptor = assetManager.openFd("click_sound.mp3");
+        AssetFileDescriptor descriptor = assetManager.openFd("sound_click.mp3");
         clickSoundId = soundPool.load(descriptor, 1);
+    }
+
+    private static void initWinSound(Context context) throws IOException {
+        AssetManager assetManager = context.getAssets();
+        AssetFileDescriptor descriptor = assetManager.openFd("sound_win.mp3");
+        winSoundId = soundPool.load(descriptor, 1);
+    }
+
+    private static void initLoseSound(Context context) throws IOException {
+        AssetManager assetManager = context.getAssets();
+        AssetFileDescriptor descriptor = assetManager.openFd("sound_lose.mp3");
+        loseSoundId = soundPool.load(descriptor, 1);
+    }
+
+    private static void initGoesXSound(Context context) throws IOException {
+        AssetManager assetManager = context.getAssets();
+        AssetFileDescriptor descriptor = assetManager.openFd("sound_goes_x.mp3");
+        goesXSoundId = soundPool.load(descriptor, 1);
+    }
+
+    private static void initGoesOSound(Context context) throws IOException {
+        AssetManager assetManager = context.getAssets();
+        AssetFileDescriptor descriptor = assetManager.openFd("sound_goes_o.mp3");
+        goesOSoundId = soundPool.load(descriptor, 1);
     }
 
     public static void playBackgroundMusic(Context context) {
@@ -91,6 +119,70 @@ public class SoundManager{
         boolean soundEffectsEnabled = prefs.getBoolean(SettingsActivity.SOUND_EFFECTS_ENABLED, false);
         if (clickSoundId != -1 && soundEffectsEnabled) {
             soundPool.play(clickSoundId, 1, 1, 0, -1, 1);
+        }
+    }
+
+    public static void playWinSound(Context context) {
+        initSoundPool();
+        initSharedPref(context);
+        try {
+            initClickSound(context);
+        } catch (IOException e) {
+            Toast.makeText(context, "Sound files not found", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        boolean soundEffectsEnabled = prefs.getBoolean(SettingsActivity.SOUND_EFFECTS_ENABLED, false);
+        if (winSoundId != -1 && soundEffectsEnabled) {
+            soundPool.play(winSoundId, 1, 1, 0, -1, 1);
+        }
+    }
+
+    public static void playLoseSound(Context context) {
+        initSoundPool();
+        initSharedPref(context);
+        try {
+            initClickSound(context);
+        } catch (IOException e) {
+            Toast.makeText(context, "Sound files not found", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        boolean soundEffectsEnabled = prefs.getBoolean(SettingsActivity.SOUND_EFFECTS_ENABLED, false);
+        if (loseSoundId != -1 && soundEffectsEnabled) {
+            soundPool.play(loseSoundId, 1, 1, 0, -1, 1);
+        }
+    }
+
+    public static void playGoesXSound(Context context) {
+        initSoundPool();
+        initSharedPref(context);
+        try {
+            initClickSound(context);
+        } catch (IOException e) {
+            Toast.makeText(context, "Sound files not found", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        boolean soundEffectsEnabled = prefs.getBoolean(SettingsActivity.SOUND_EFFECTS_ENABLED, false);
+        if (goesXSoundId != -1 && soundEffectsEnabled) {
+            soundPool.play(goesXSoundId, 1, 1, 0, -1, 1);
+        }
+    }
+
+    public static void playGoesOSound(Context context) {
+        initSoundPool();
+        initSharedPref(context);
+        try {
+            initClickSound(context);
+        } catch (IOException e) {
+            Toast.makeText(context, "Sound files not found", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        boolean soundEffectsEnabled = prefs.getBoolean(SettingsActivity.SOUND_EFFECTS_ENABLED, false);
+        if (goesOSoundId != -1 && soundEffectsEnabled) {
+            soundPool.play(goesOSoundId, 1, 1, 0, -1, 1);
         }
     }
 

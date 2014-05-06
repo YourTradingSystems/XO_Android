@@ -64,6 +64,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             }
 
         }
+        SoundManager.playClickSound(this);
     }
 
     @Override
