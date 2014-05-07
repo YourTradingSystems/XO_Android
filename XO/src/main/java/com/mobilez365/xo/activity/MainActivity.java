@@ -1,6 +1,7 @@
 package com.mobilez365.xo.activity;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,9 +27,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main_layout);
+        SoundManager.initSound(this, SoundManager.CLICK_SOUND);
+
         initAllView();
     }
+
     private void initAllView(){
         //Buttons
         onePlayerButton = (Button)findViewById(R.id.button_one_player_main_activity);
@@ -64,7 +69,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             }
 
         }
-        SoundManager.playClickSound(this);
+        SoundManager.playSound(SoundManager.CLICK_SOUND);
     }
 
     @Override

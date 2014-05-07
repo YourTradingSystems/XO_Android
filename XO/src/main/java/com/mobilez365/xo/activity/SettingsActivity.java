@@ -1,6 +1,7 @@
 package com.mobilez365.xo.activity;
 
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -22,13 +23,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                SoundManager.playSound(SoundManager.CLICK_SOUND);
                 finish();
         }
         return true;
@@ -36,6 +37,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        SoundManager.playSound(SoundManager.CLICK_SOUND);
         if(key.equals(BACKGROUND_MUSIC_ENABLED)) {
             boolean backgroundMusicEnabled = sharedPreferences.getBoolean(BACKGROUND_MUSIC_ENABLED, false);
             if(backgroundMusicEnabled)
@@ -43,12 +45,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             else
                 SoundManager.stopBackgroundMusic();
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         XOApplication.activityResumed();
         if (XOApplication.isHidden) {
@@ -61,11 +64,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     protected void onPause() {
         super.onPause();
         XOApplication.activityPaused();
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         SoundManager.playBackgroundMusic(this);
     }
 

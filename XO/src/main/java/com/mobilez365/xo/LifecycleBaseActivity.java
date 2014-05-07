@@ -1,6 +1,7 @@
 package com.mobilez365.xo;
 
 import android.app.Activity;
+import android.media.AudioManager;
 import android.support.v4.app.FragmentActivity;
 
 /**
@@ -28,6 +29,7 @@ public class LifecycleBaseActivity extends FragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         SoundManager.playBackgroundMusic(this);
     }
 
