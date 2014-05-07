@@ -1,21 +1,17 @@
 package com.mobilez365.xo.activity;
 
-import android.app.Activity;
 
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Game;
-import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-import com.mobilez365.xo.GameServiceUtil.BaseGameActivity;
+import com.mobilez365.xo.gameserviceutil.BaseGameActivity;
 import com.mobilez365.xo.R;
-
-import org.w3c.dom.Text;
+import com.mobilez365.xo.util.Constant;
 
 
 /**
@@ -25,7 +21,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     private Button onePlayerButton, twoPlayerButton, onlinePlayButton, aboutButton;
     private TextView userNameTextView;
-    private Person userAccount;
+
 
 
     @Override
@@ -56,15 +52,22 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
        int id =  v.getId();
         switch (id){
             case R.id.button_one_player_main_activity:{
-                //TODO: Open Player VS II Game
+                Intent myIntent = new Intent(this, GameActivity.class);
+                myIntent.putExtra("screenType", Constant.SCREEN_TYPE_ONE_PLAYER);
+                startActivity(myIntent);
                 break;
             }
             case R.id.button_two_player_main_activity:{
+                Intent myIntent = new Intent(this, GameActivity.class);
+                myIntent.putExtra("screenType", Constant.SCREEN_TYPE_TWO_PLAYER);
+                startActivity(myIntent);
                 //TODO: Open Player VS Player Game
                 break;
             }
             case R.id.button_online_main_activity:{
-                //TODO: Open Online  Game
+                Intent myIntent = new Intent(this, GameActivity.class);
+                myIntent.putExtra("screenType", Constant.SCREEN_TYPE_ONLINE);
+                startActivity(myIntent);
                 break;
             }
 
@@ -73,14 +76,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     @Override
     public void onSignInFailed() {
-        userNameTextView.setText(R.string.please_login_string);
+
     }
 
     @Override
     public void onSignInSucceeded() {
         if (mHelper.getApiClient().isConnected()) {
-
-            userNameTextView.setText(Plus.AccountApi.getAccountName(mHelper.getApiClient()));
+            userNameTextView.setText(Plus.PeopleApi.getCurrentPerson(mHelper.getApiClient()).getDisplayName());
 
         } else {
             // not signed in. Show the "sign in" button and explanation.

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@android:color/white">
+    <Button
+        android:id="@+id/quick_game_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/quick_game_string"/>
+    <Button
+        android:id="@+id/invite_friend_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/invite_friend_string"/>
+    <Button
+        android:id="@+id/pending_invite_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/chech_invte_string"/>
+
+</LinearLayout>

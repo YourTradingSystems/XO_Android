@@ -15,7 +15,10 @@
     <string name="gamehelper_unknown_error">Unknown error.</string>
 
     <!--Notification Message-->
+        <string name="please_login_string">Please Log In</string>
 
-    <string name="please_login_string">Please Log In</string>
-
+    <!--Select Online Game-->
+    <string name="quick_game_string">Quick Game</string>
+    <string name="invite_friend_string">Invite Friend</string>
+    <string name="chech_invte_string">Check Invite</string>
 </resources>
