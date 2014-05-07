@@ -8,6 +8,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.mobilez365.xo.activity.SettingsActivity;
@@ -41,40 +42,35 @@ public class SoundManager {
     }
 
     public static void initSound(Context context, int soundId) {
-        initSharedPref(context);
-        boolean soundEffectsEnabled = prefs.getBoolean(Constant.SOUND_EFFECTS_ENABLED, false);
-        if (soundEffectsEnabled) {
-            initSoundPool();
+        initSoundPool();
+        AssetManager assetManager = context.getAssets();
+        AssetFileDescriptor descriptor;
 
-            AssetManager assetManager = context.getAssets();
-            AssetFileDescriptor descriptor;
-
-            try {
-                switch (soundId) {
-                    case Constant.CLICK_SOUND:
-                        descriptor = assetManager.openFd("sound_click.mp3");
-                        clickSoundId = soundPool.load(descriptor, 1);
-                        break;
-                    case Constant.WIN_SOUND:
-                        descriptor = assetManager.openFd("sound_win.mp3");
-                        winSoundId = soundPool.load(descriptor, 1);
-                        break;
-                    case Constant.LOSE_SOUND:
-                        descriptor = assetManager.openFd("sound_lose.mp3");
-                        loseSoundId = soundPool.load(descriptor, 1);
-                        break;
-                    case Constant.GOES_X__SOUND:
-                        descriptor = assetManager.openFd("sound_goes_x.mp3");
-                        goesXSoundId = soundPool.load(descriptor, 1);
-                        break;
-                    case Constant.GOES_O_SOUND:
-                        descriptor = assetManager.openFd("sound_goes_o.mp3");
-                        goesOSoundId = soundPool.load(descriptor, 1);
-                        break;
-                }
-            } catch (IOException e) {
-                Toast.makeText(context, "Sound files not found", Toast.LENGTH_LONG).show();
+        try {
+            switch (soundId) {
+                case Constant.CLICK_SOUND:
+                    descriptor = assetManager.openFd("sound_click.mp3");
+                    clickSoundId = soundPool.load(descriptor, 1);
+                    break;
+                case Constant.WIN_SOUND:
+                    descriptor = assetManager.openFd("sound_win.mp3");
+                    winSoundId = soundPool.load(descriptor, 1);
+                    break;
+                case Constant.LOSE_SOUND:
+                    descriptor = assetManager.openFd("sound_lose.mp3");
+                    loseSoundId = soundPool.load(descriptor, 1);
+                    break;
+                case Constant.GOES_X__SOUND:
+                    descriptor = assetManager.openFd("sound_goes_x.mp3");
+                    goesXSoundId = soundPool.load(descriptor, 1);
+                    break;
+                case Constant.GOES_O_SOUND:
+                    descriptor = assetManager.openFd("sound_goes_o.mp3");
+                    goesOSoundId = soundPool.load(descriptor, 1);
+                    break;
             }
+        } catch (IOException e) {
+            Log.e("sound_tag", "sound not found");
         }
     }
 
@@ -121,13 +117,9 @@ public class SoundManager {
 
     public static void stopBackgroundMusic() {
         if (backgroundMusicPlayer != null) {
-            try {
-                backgroundMusicPlayer.stop();
-                backgroundMusicPlayer.release();
-                backgroundMusicPlayer = null;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            backgroundMusicPlayer.stop();
+            backgroundMusicPlayer.release();
+            backgroundMusicPlayer = null;
         }
     }
 
