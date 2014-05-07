@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.media.AudioManager;
 import android.support.v4.app.FragmentActivity;
 
+import com.mobilez365.xo.util.Constant;
+
 /**
  * Created by andrewtivodar on 06.05.2014.
  */
@@ -18,6 +20,12 @@ public class LifecycleBaseActivity extends FragmentActivity {
             XOApplication.isHidden = false;
             SoundManager.resumeBackgroundMusic();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SoundManager.playSound(Constant.CLICK_SOUND);
     }
 
     @Override

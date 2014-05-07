@@ -1,7 +1,5 @@
 package com.mobilez365.xo.activity;
 
-import android.content.Intent;
-import android.media.AudioManager;
 
 
 import android.content.Intent;
@@ -11,9 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.plus.Plus;
+import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.gameserviceutil.BaseGameActivity;
 import com.mobilez365.xo.R;
-import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.util.Constant;
 
 
@@ -22,24 +20,17 @@ import com.mobilez365.xo.util.Constant;
  */
 public class MainActivity extends BaseGameActivity implements View.OnClickListener{
 
-    private TextView onePlayerButton, twoPlayerButton, onlinePlayButton, aboutButton;
+    private TextView onePlayerButton, twoPlayerButton, onlinePlayButton, aboutButton, settingsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main_layout);
-        SoundManager.initSound(this, SoundManager.CLICK_SOUND);
+
+        SoundManager.initSound(this, Constant.CLICK_SOUND);
 
         initAllView();
     }
-
-    private void initAllView(){
-        //Buttons
-        onePlayerButton = (Button)findViewById(R.id.button_one_player_main_activity);
-        twoPlayerButton = (Button)findViewById(R.id.button_two_player_main_activity);
-        onlinePlayButton = (Button)findViewById(R.id.button_online_main_activity);
-        aboutButton = (Button)findViewById(R.id.button_about_main_activity);
 
     private void initAllView() {
 
@@ -47,18 +38,20 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         twoPlayerButton = (TextView) findViewById(R.id.main_activity_two_player);
         onlinePlayButton = (TextView) findViewById(R.id.main_activity_play_online);
         aboutButton = (TextView) findViewById(R.id.main_activity_about);
+        settingsButton = (Button) findViewById(R.id.main_activity_settings);
 
         onePlayerButton.setOnClickListener(this);
         twoPlayerButton.setOnClickListener(this);
         onlinePlayButton.setOnClickListener(this);
         aboutButton.setOnClickListener(this);
+        settingsButton.setOnClickListener(this);
 
         //Views
 
     }
     @Override
     public void onClick(View v) {
-       int id =  v.getId();
+        int id = v.getId();
         switch (id){
             case R.id.main_activity_one_player:{
                 Intent myIntent = new Intent(this, GameActivity.class);
@@ -79,9 +72,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 startActivity(myIntent);
                 break;
             }
-
+            case R.id.main_activity_settings:{
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            }
         }
-        SoundManager.playSound(SoundManager.CLICK_SOUND);
+        SoundManager.playSound(Constant.CLICK_SOUND);
     }
 
     @Override

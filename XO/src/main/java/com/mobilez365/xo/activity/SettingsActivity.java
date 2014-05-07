@@ -10,11 +10,9 @@ import android.view.MenuItem;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.XOApplication;
+import com.mobilez365.xo.util.Constant;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    public final static String SOUND_EFFECTS_ENABLED = "sound_enabled";
-    public final static String BACKGROUND_MUSIC_ENABLED = "music_enabled";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +27,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                SoundManager.playSound(SoundManager.CLICK_SOUND);
+                SoundManager.playSound(Constant.CLICK_SOUND);
                 finish();
         }
         return true;
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SoundManager.playSound(Constant.CLICK_SOUND);
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        SoundManager.playSound(SoundManager.CLICK_SOUND);
-        if(key.equals(BACKGROUND_MUSIC_ENABLED)) {
-            boolean backgroundMusicEnabled = sharedPreferences.getBoolean(BACKGROUND_MUSIC_ENABLED, false);
+        SoundManager.playSound(Constant.CLICK_SOUND);
+        if(key.equals(Constant.BACKGROUND_MUSIC_ENABLED)) {
+            boolean backgroundMusicEnabled = sharedPreferences.getBoolean(Constant.BACKGROUND_MUSIC_ENABLED, false);
             if(backgroundMusicEnabled)
                 SoundManager.playBackgroundMusic(this);
             else

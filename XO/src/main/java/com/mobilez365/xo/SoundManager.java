@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.mobilez365.xo.activity.SettingsActivity;
+import com.mobilez365.xo.util.Constant;
 
 import java.io.IOException;
 
@@ -21,12 +22,6 @@ public class SoundManager {
     private static SoundPool soundPool;
     private static SharedPreferences prefs;
     private static MediaPlayer backgroundMusicPlayer;
-
-    public static final int CLICK_SOUND = 1;
-    public static final int WIN_SOUND = 2;
-    public static final int LOSE_SOUND = 3;
-    public static final int GOES_X__SOUND = 4;
-    public static final int GOES_O_SOUND = 5;
 
     private static int clickSoundId = -1;
     private static int winSoundId = -1;
@@ -47,7 +42,7 @@ public class SoundManager {
 
     public static void initSound(Context context, int soundId) {
         initSharedPref(context);
-        boolean soundEffectsEnabled = prefs.getBoolean(SettingsActivity.SOUND_EFFECTS_ENABLED, false);
+        boolean soundEffectsEnabled = prefs.getBoolean(Constant.SOUND_EFFECTS_ENABLED, false);
         if (soundEffectsEnabled) {
             initSoundPool();
 
@@ -56,23 +51,23 @@ public class SoundManager {
 
             try {
                 switch (soundId) {
-                    case CLICK_SOUND:
+                    case Constant.CLICK_SOUND:
                         descriptor = assetManager.openFd("sound_click.mp3");
                         clickSoundId = soundPool.load(descriptor, 1);
                         break;
-                    case WIN_SOUND:
+                    case Constant.WIN_SOUND:
                         descriptor = assetManager.openFd("sound_win.mp3");
                         winSoundId = soundPool.load(descriptor, 1);
                         break;
-                    case LOSE_SOUND:
+                    case Constant.LOSE_SOUND:
                         descriptor = assetManager.openFd("sound_lose.mp3");
                         loseSoundId = soundPool.load(descriptor, 1);
                         break;
-                    case GOES_X__SOUND:
+                    case Constant.GOES_X__SOUND:
                         descriptor = assetManager.openFd("sound_goes_x.mp3");
                         goesXSoundId = soundPool.load(descriptor, 1);
                         break;
-                    case GOES_O_SOUND:
+                    case Constant.GOES_O_SOUND:
                         descriptor = assetManager.openFd("sound_goes_o.mp3");
                         goesOSoundId = soundPool.load(descriptor, 1);
                         break;
@@ -84,23 +79,23 @@ public class SoundManager {
     }
 
     public static void playSound(int soundId) {
-        boolean soundEffectsEnabled = prefs.getBoolean(SettingsActivity.SOUND_EFFECTS_ENABLED, false);
+        boolean soundEffectsEnabled = prefs.getBoolean(Constant.SOUND_EFFECTS_ENABLED, false);
         if (soundEffectsEnabled) {
             int sampleId = -1;
             switch (soundId) {
-                case CLICK_SOUND:
+                case Constant.CLICK_SOUND:
                     sampleId = clickSoundId;
                     break;
-                case WIN_SOUND:
+                case Constant.WIN_SOUND:
                     sampleId = winSoundId;
                     break;
-                case LOSE_SOUND:
+                case Constant.LOSE_SOUND:
                     sampleId = loseSoundId;
                     break;
-                case GOES_X__SOUND:
+                case Constant.GOES_X__SOUND:
                     sampleId = goesXSoundId;
                     break;
-                case GOES_O_SOUND:
+                case Constant.GOES_O_SOUND:
                     sampleId = goesOSoundId;
                     break;
             }
@@ -112,7 +107,7 @@ public class SoundManager {
 
     public static void playBackgroundMusic(Context context) {
         initSharedPref(context);
-        boolean backgroundMusicEnabled = prefs.getBoolean(SettingsActivity.BACKGROUND_MUSIC_ENABLED, false);
+        boolean backgroundMusicEnabled = prefs.getBoolean(Constant.BACKGROUND_MUSIC_ENABLED, false);
         if (backgroundMusicEnabled) {
             if (backgroundMusicPlayer == null) {
                 backgroundMusicPlayer = MediaPlayer.create(context, R.raw.background_music);
