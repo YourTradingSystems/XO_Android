@@ -31,7 +31,7 @@
             android:theme="@style/AppSettingsTheme"
             android:label="@string/settings_label">
         </activity>
-
+        <activity android:name=".activity.GameActivity" android:screenOrientation="portrait"/>
 
         <meta-data android:name="com.google.android.gms.games.APP_ID"
             android:value="@string/app_id" />
