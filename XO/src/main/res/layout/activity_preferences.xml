@@ -6,60 +6,68 @@
     android:background="@drawable/bg">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
 
         <CheckedTextView
             android:id="@+id/activity_preferences_sound"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/common_signin_btn_default_background"
+            android:background="@drawable/cell_sound_bg"
             android:text="@string/settings_sound"
             android:checkMark="@drawable/selector_check_box_settings"
             android:gravity="center_vertical"
             android:textColor="@color/text_color"
-            android:padding="15dp" />
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"/>
 
         <CheckedTextView
             android:id="@+id/activity_preferences_music"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/common_signin_btn_default_background"
+            android:background="@drawable/cell_music_bg"
             android:text="@string/settings_music"
             android:checkMark="@drawable/selector_check_box_settings"
             android:gravity="center_vertical"
             android:textColor="@color/text_color"
-            android:layout_marginTop="20dp"
             android:layout_below="@+id/activity_preferences_sound"
-            android:padding="15dp" />
+
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"/>
 
         <CheckedTextView
             android:id="@+id/activity_preferences_push"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/common_signin_btn_default_background"
+            android:background="@drawable/cell_push_bg"
             android:text="@string/settings_push"
             android:checkMark="@drawable/selector_check_box_settings"
             android:gravity="center_vertical"
             android:textColor="@color/text_color"
-            android:layout_marginTop="20dp"
             android:layout_below="@+id/activity_preferences_music"
-            android:padding="15dp" />
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"/>
 
         <CheckedTextView
             android:id="@+id/activity_preferences_analytics"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/common_signin_btn_default_background"
+            android:background="@drawable/cell_sound_bg"
             android:text="@string/settings_analytics"
             android:checkMark="@drawable/selector_check_box_settings"
             android:gravity="center_vertical"
             android:textColor="@color/text_color"
-            android:layout_marginTop="20dp"
             android:layout_below="@+id/activity_preferences_push"
-            android:padding="15dp" />
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"/>
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/activity_preferences_adsPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
     </RelativeLayout>
 
 </RelativeLayout>

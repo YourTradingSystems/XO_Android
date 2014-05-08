@@ -95,6 +95,104 @@ public class AIPlayer {
     }
 
     private Bundle getHardMove(FieldValue[][] gameField, int countInRowToWin, FieldValue aiSide) {
+        int size = gameField.length;
+
+        FieldValue oppSide = aiSide == FieldValue.X ?
+                FieldValue.O :
+                FieldValue.X;
+
+        int aiCount = 0;
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                if (gameField[i][j] == aiSide)
+                    aiCount++;
+
+        int oppCount = 0;
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                if (gameField[i][j] == oppSide)
+                    oppCount++;
+
+//        switch (aiCount) {
+//
+//            case 0: {
+//                if (oppCount == 0)  // AI start game
+//                    return createMove((int)( size / 2), (int)( size / 2));
+//                else {  // Player start game
+//                    // oppCount == 1
+//                    if (gameField[(int)( size / 2)][(int)( size / 2)] == FieldValue.Empty)
+//                        return createMove((int) (size / 2), (int) (size / 2));
+//                    else
+//                        return createMove(0,0);
+//                }
+//            }
+//
+//            case 1: {
+//                if (oppCount == 1) {    // AI start game
+//                    if (gameField[0][0] == oppSide)
+//                        return createMove(size - 1, size - 1);
+//                    else
+//                    if (gameField[0][size - 1] == oppSide)
+//                        return createMove(size - 1, 0);
+//                    else
+//                    if (gameField[size - 1][0] == oppSide)
+//                        return createMove(0, size - 1);
+//                    else
+//                    if (gameField[size - 1][size - 1] == oppSide)
+//                        return createMove(0, 0);
+//                    else  {
+//                        // random corner
+//                        switch (mRandom.nextInt(4)){
+//                            case 0: return createMove(0, 0);
+//                            case 1: return createMove(0, size - 1);
+//                            case 2: return createMove(size - 1, 0);
+//                            case 3: return createMove(size - 1, size - 1);
+//                        }
+//                    }
+//                }
+//                else {  // Player start game
+//                    // oppCount == 2
+//                    Bundle protectMove = checkForProtect(gameField, countInRowToWin, aiSide);
+//                    if (protectMove != null)
+//                        return protectMove;
+//
+//                }
+//            }
+//
+//            case 2: {
+//                Bundle winMove = checkForWin(gameField, countInRowToWin, aiSide);
+//                if (winMove != null)
+//                    return winMove;
+//
+//                Bundle protectMove = checkForProtect(gameField, countInRowToWin, aiSide);
+//                if (protectMove != null)
+//                    return protectMove;
+//
+//                if (oppCount == 2) {    // AI start game
+//                    // if 2 corner is free - win
+//                }
+//                else {  // Player start game
+//                    // oppCount == 3
+//
+//                }
+//                break;
+//            }
+//
+//            default: {
+//                Bundle winMove = checkForWin(gameField, countInRowToWin, aiSide);
+//                if (winMove != null)
+//                    return winMove;
+//
+//                Bundle protectMove = checkForProtect(gameField, countInRowToWin, aiSide);
+//                if (protectMove != null)
+//                    return protectMove;
+//
+//                return getEasyMove(gameField);
+//            }
+//        }
+
+
+
         return null;
     }
 

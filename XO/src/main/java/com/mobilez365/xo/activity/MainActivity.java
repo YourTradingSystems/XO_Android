@@ -46,6 +46,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         aboutButton.setOnClickListener(this);
         settingsButton.setOnClickListener(this);
 
+
         //Views
 
     }

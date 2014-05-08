@@ -2,8 +2,6 @@ package com.mobilez365.xo.ai;
 
 import android.os.Bundle;
 
-import java.util.ArrayList;
-
 
 /**
  * Created with Android Studio.
