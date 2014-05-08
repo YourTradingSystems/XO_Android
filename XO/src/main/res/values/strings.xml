@@ -33,13 +33,9 @@
     <string name="main_menu_settings">SETTINGS</string>
 
     <!--Settings text-->
-    <string name="settings_sound_category_title">Sound preferences</string>
-    <string name="settings_sound_category_music_title">XO music</string>
-    <string name="settings_sound_category_sound_title">Sound effects</string>
-    <string name="settings_sound_category_music_description">Enable background music</string>
-    <string name="settings_sound_category_sound_description">Enable sound effects like click or congratulation</string>
-    <string name="settings_notification_category_title">Notifications</string>
-    <string name="settings_notification_category_push_title">Push Notifications</string>
-    <string name="settings_notification_category_push_description">Enable push notifications</string>
+    <string name="settings_sound">Sound</string>
+    <string name="settings_music">Music</string>
+    <string name="settings_push">Push</string>
+    <string name="settings_analytics">Google Analytics</string>
 
 </resources>

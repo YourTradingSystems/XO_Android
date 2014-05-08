@@ -25,7 +25,7 @@ public class LifecycleBaseActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SoundManager.playSound(Constant.CLICK_SOUND);
+        SoundManager.playSound(this, Constant.CLICK_SOUND);
     }
 
     @Override

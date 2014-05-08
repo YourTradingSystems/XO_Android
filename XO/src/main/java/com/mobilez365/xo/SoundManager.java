@@ -9,9 +9,8 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.mobilez365.xo.activity.SettingsActivity;
+import com.mobilez365.xo.util.AppSettings;
 import com.mobilez365.xo.util.Constant;
 
 import java.io.IOException;
@@ -21,7 +20,6 @@ import java.io.IOException;
  */
 public class SoundManager {
     private static SoundPool soundPool;
-    private static SharedPreferences prefs;
     private static MediaPlayer backgroundMusicPlayer;
 
     private static int clickSoundId = -1;
@@ -33,12 +31,6 @@ public class SoundManager {
     private static void initSoundPool() {
         if (soundPool == null)
             soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-    }
-
-    private static void initSharedPref(Context context) {
-        if (prefs == null) {
-            prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        }
     }
 
     public static void initSound(Context context, int soundId) {
@@ -74,8 +66,8 @@ public class SoundManager {
         }
     }
 
-    public static void playSound(int soundId) {
-        boolean soundEffectsEnabled = prefs.getBoolean(Constant.SOUND_EFFECTS_ENABLED, false);
+    public static void playSound(Context context, int soundId) {
+        boolean soundEffectsEnabled = AppSettings.isSoundEnabled(context);
         if (soundEffectsEnabled) {
             int sampleId = -1;
             switch (soundId) {
@@ -102,8 +94,7 @@ public class SoundManager {
     }
 
     public static void playBackgroundMusic(Context context) {
-        initSharedPref(context);
-        boolean backgroundMusicEnabled = prefs.getBoolean(Constant.BACKGROUND_MUSIC_ENABLED, false);
+        boolean backgroundMusicEnabled = AppSettings.isMusicEnabled(context);
         if (backgroundMusicEnabled) {
             if (backgroundMusicPlayer == null) {
                 backgroundMusicPlayer = MediaPlayer.create(context, R.raw.background_music);

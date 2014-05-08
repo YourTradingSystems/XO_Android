@@ -24,14 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activity.GameActivity" android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppSettingsTheme"
-            android:label="@string/settings_label">
-        </activity>
+        <activity android:name=".activity.PreferencesActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.AboutActivity" android:screenOrientation="portrait"/>
 
         <meta-data android:name="com.google.android.gms.games.APP_ID"
             android:value="@string/app_id" />

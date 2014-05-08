@@ -73,11 +73,15 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 break;
             }
             case R.id.main_activity_settings:{
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivity(new Intent(this, PreferencesActivity.class));
+                break;
+            }
+            case R.id.main_activity_about:{
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
             }
         }
-        SoundManager.playSound(Constant.CLICK_SOUND);
+        SoundManager.playSound(this, Constant.CLICK_SOUND);
     }
 
     @Override
