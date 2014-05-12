@@ -97,21 +97,10 @@ public class AIPlayer {
     private Bundle getHardMove(FieldValue[][] gameField, int countInRowToWin, FieldValue aiSide) {
         int size = gameField.length;
 
-        FieldValue oppSide = aiSide == FieldValue.X ?
-                FieldValue.O :
-                FieldValue.X;
-
-        int aiCount = 0;
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                if (gameField[i][j] == aiSide)
-                    aiCount++;
-
-        int oppCount = 0;
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                if (gameField[i][j] == oppSide)
-                    oppCount++;
+        if (size == 3)
+            return getHard3Move(gameField, countInRowToWin, aiSide);
+        else
+            return getMediumMove(gameField, countInRowToWin, aiSide);
 
 //        switch (aiCount) {
 //
@@ -190,10 +179,6 @@ public class AIPlayer {
 //                return getEasyMove(gameField);
 //            }
 //        }
-
-
-
-        return null;
     }
 
 
@@ -332,11 +317,292 @@ public class AIPlayer {
         return checkForWin(gameField, countInRowToWin, oppSide);
     }
 
-    private Bundle createMove(int x, int y) {
+    private Bundle createMove(int i, int j) {
         Bundle result = new Bundle();
-        result.putInt(COORDINATE_X, x);
-        result.putInt(COORDINATE_Y, y);
+        result.putInt(COORDINATE_X, i);
+        result.putInt(COORDINATE_Y, j);
         return result;
+    }
+
+    private Bundle getHard3Move(FieldValue[][] gameField, int countInRowToWin, FieldValue aiSide) {
+        int size = 3;
+
+        FieldValue oppSide = aiSide == FieldValue.X ?
+                FieldValue.O :
+                FieldValue.X;
+
+        int aiCount = 0;
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                if (gameField[i][j] == aiSide)
+                    aiCount++;
+
+        int oppCount = 0;
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                if (gameField[i][j] == oppSide)
+                    oppCount++;
+
+        if (aiCount == oppCount) {
+            // AI move first
+
+            switch (aiCount) {
+                case 0: {
+                    switch (mRandom.nextInt(5)) {
+                        case 0: return createMove(0, 0);
+                        case 1: return createMove(0, 2);
+                        case 2: return createMove(2, 0);
+                        case 3: return createMove(2, 2);
+                        case 4: return createMove(1, 1);
+                    }
+                }
+                case 1: {
+                    if (gameField[1][1] == aiSide) {
+                        // first AI move - center
+                        if (gameField[0][0] == oppSide)
+                            return createMove(2, 2);
+                        else if (gameField[0][2] == oppSide)
+                            return createMove(2,0);
+                        else if (gameField[2][0] == oppSide)
+                            return createMove(0,2);
+                        else if (gameField[2][2] == oppSide)
+                            return createMove(0,0);
+                        else {
+                            if (gameField[0][1] == oppSide) {
+                                if (mRandom.nextBoolean())
+                                    return createMove(2, 0);
+                                else
+                                    return createMove(2, 2);
+                            }
+                            else if (gameField[1][0] == oppSide) {
+                                if (mRandom.nextBoolean())
+                                    return createMove(0, 2);
+                                else
+                                    return createMove(2, 2);
+                            }
+                            else if (gameField[1][2] == oppSide) {
+                                if (mRandom.nextBoolean())
+                                    return createMove(0, 0);
+                                else
+                                    return createMove(2, 0);
+                            }
+                            else {
+                                if (mRandom.nextBoolean())
+                                    return createMove(0, 0);
+                                else
+                                    return createMove(0, 2);
+                            }
+                        }
+                    }
+                    else {
+                        // first AI move - corner
+                        if (gameField[1][1] == oppSide) {
+                            if (gameField[0][0] == aiSide)
+                                return createMove(2, 2);
+                            else if (gameField[0][2] == aiSide)
+                                return createMove(2, 0);
+                            else if (gameField[2][0] == aiSide)
+                                return createMove(0, 2);
+                            else
+                                return createMove(0, 0);
+                        }
+                        else {
+                            if (gameField[0][0] == aiSide) {
+                                if (gameField[0][1] == oppSide)
+                                    return createMove(2, 0);
+                                else
+                                    return createMove(0, 2);
+                            }
+                            else if (gameField[0][2] == aiSide){
+                                if (gameField[0][1] == oppSide)
+                                    return createMove(2, 2);
+                                else
+                                    return createMove(0, 0);
+                            }
+                            else if (gameField[2][0] == aiSide) {
+                                if (gameField[2][1] == oppSide)
+                                    return createMove(0, 0);
+                                else
+                                    return createMove(2, 2);
+                            }
+                            else {
+                                if (gameField[2][1] == oppSide)
+                                    return createMove(0, 2);
+                                else
+                                    return createMove(2, 0);
+                            }
+                        }
+                    }
+                }
+                case 2: {
+                    Bundle bundleForWin = checkForWin(gameField, countInRowToWin, aiSide);
+                    if (bundleForWin != null)
+                        return bundleForWin;
+
+                    Bundle bundleForProtect = checkForProtect(gameField, countInRowToWin, aiSide);
+                    if (bundleForProtect != null)
+                        return bundleForProtect;
+
+                    if (gameField[1][1] == aiSide) {
+                        if (gameField[0][0] == aiSide) {
+                            if (gameField[0][1] == oppSide)
+                                return createMove(2, 0);
+                            else
+                                return createMove(0, 2);
+                        }
+                        else if (gameField[0][2] == aiSide) {
+                            if (gameField[0][1] == oppSide)
+                                return createMove(2, 2);
+                            else
+                                return createMove(0, 0);
+                        }
+                        else if (gameField[2][0] == aiSide) {
+                            if (gameField[2][1] == oppSide)
+                                return createMove(0, 0);
+                            else
+                                return createMove(2, 2);
+                        }
+                        else {
+                            if (gameField[2][1] == oppSide)
+                                return createMove(0, 2);
+                            else
+                                return createMove(2, 0);
+                        }
+                    }
+                    else {
+                        if (gameField[0][0] == aiSide && gameField[0][2] == aiSide) {
+                            if (gameField[1][0] == FieldValue.Empty)
+                                return createMove(2, 0);
+                            else
+                                return createMove(2, 2);
+                        }
+                        else if (gameField[2][0] == aiSide && gameField[2][2] == aiSide) {
+                            if (gameField[1][0] == FieldValue.Empty)
+                                return createMove(0, 0);
+                            else
+                                return createMove(0, 2);
+                        }
+                        else if (gameField[0][0] == aiSide && gameField[2][0] == aiSide) {
+                            if (gameField[0][1] == FieldValue.Empty)
+                                return createMove(0, 2);
+                            else
+                                return createMove(2, 2);
+                        }
+                        else {
+                            if (gameField[0][1] == FieldValue.Empty)
+                                return createMove(0, 0);
+                            else
+                                return createMove(2, 0);
+                        }
+                    }
+                }
+                default: {
+                    return getMediumMove(gameField, countInRowToWin, aiSide);
+                }
+            }
+        }
+        else {
+            // Player move first...
+
+            switch (aiCount) {
+                case 0: {
+                    // ... to corner
+                    if (gameField[0][0] == oppSide || gameField[0][2] == oppSide || gameField[2][0] == oppSide || gameField[2][2] == oppSide) {
+                        return createMove(1, 1);
+                    }
+                    // ... to center
+                    else if (gameField[1][1] == oppSide) {
+                        switch (mRandom.nextInt(4)) {
+                            case 0: return createMove(0, 0);
+                            case 1: return createMove(0, 2);
+                            case 2: return createMove(2, 0);
+                            case 3: return createMove(2, 2);
+                        }
+                    }
+                    // ... to center side
+                    else {
+                        return createMove(1, 1);
+                    }
+
+                }
+                case 1: {
+                    Bundle bundleForProtect = checkForProtect(gameField, countInRowToWin, aiSide);
+                    if (bundleForProtect != null)
+                        return bundleForProtect;
+
+                    if (gameField[1][1] == oppSide) {
+                        if (gameField[0][0] == oppSide) {
+                            if (mRandom.nextBoolean())
+                                return createMove(0, 2);
+                            else
+                                return createMove(2, 0);
+                        }
+                        else if (gameField[0][2] == oppSide) {
+                            if (mRandom.nextBoolean())
+                                return createMove(0, 0);
+                            else
+                                return createMove(2, 2);
+                        }
+                        else if (gameField[2][0] == oppSide) {
+                            if (mRandom.nextBoolean())
+                                return createMove(0, 0);
+                            else
+                                return createMove(2, 2);
+                        }
+                        else {
+                            if (mRandom.nextBoolean())
+                                return createMove(0, 2);
+                            else
+                                return createMove(2, 0);
+                        }
+                    }
+                    else {
+                        int oppCorner = 0;
+                        if (gameField[0][0] == oppSide) oppCorner++;
+                        if (gameField[0][2] == oppSide) oppCorner++;
+                        if (gameField[2][0] == oppSide) oppCorner++;
+                        if (gameField[2][2] == oppSide) oppCorner++;
+
+                        if (oppCorner == 2) {
+                            switch (mRandom.nextInt(4)) {
+                                case 0: return createMove(0, 1);
+                                case 1: return createMove(1, 0);
+                                case 2: return createMove(1, 2);
+                                case 3: return createMove(2, 1);
+                            }
+                        }
+                        else {
+                            if ( (gameField[0][1] == oppSide || gameField[0][2] == oppSide) &&
+                                 (gameField[1][0] == oppSide || gameField[2][0] == oppSide) ) {
+                                return createMove(0, 0);
+                            }
+                            else if ( (gameField[0][0] == oppSide || gameField[0][1] == oppSide) &&
+                                    (gameField[1][2] == oppSide || gameField[2][2] == oppSide) )
+                                return createMove(0, 2);
+                            else if ( (gameField[0][0] == oppSide || gameField[1][0] == oppSide) &&
+                                    (gameField[2][1] == oppSide || gameField[2][2] == oppSide) )
+                                return createMove(2, 0);
+                            else if ( (gameField[0][2] == oppSide || gameField[1][2] == oppSide) &&
+                                    (gameField[2][0] == oppSide || gameField[2][1] == oppSide) )
+                                return createMove(2, 2);
+                            else {
+                                switch (mRandom.nextInt(4)) {
+                                    case 0: return createMove(0, 0);
+                                    case 1: return createMove(0, 2);
+                                    case 2: return createMove(2, 0);
+                                    case 3: return createMove(2, 2);
+                                }
+                            }
+                        }
+                    }
+                }
+                case 2:
+                default: {
+                    return getMediumMove(gameField, countInRowToWin,aiSide);
+                }
+            }
+        }
+
     }
 
 }
