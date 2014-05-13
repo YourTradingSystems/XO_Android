@@ -47,7 +47,7 @@ public class GameActivity extends BaseGameActivity {
     private List<Participant> mParticipants;
     public Room mXORoom;
     private String mXORoomID;
-    private String mMyId;
+    private String mMyPartisipientId;
     private boolean isFierstMessage = true;
 
     private int myRundom365;
@@ -203,6 +203,7 @@ public class GameActivity extends BaseGameActivity {
 
             // prevent screen from sleeping during handshake
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         }
         if (request == RC_INVITATION_INBOX) {
             if (response != Activity.RESULT_OK) {
@@ -323,7 +324,8 @@ public class GameActivity extends BaseGameActivity {
                 mXORoomID = room.getRoomId();
 
                 mXORoom = room;
-                mMyId = Games.Players.getCurrentPlayerId(mHelper.getApiClient());
+//
+//
 
                 sendMessageToAllInRoom(String.valueOf(myRundom365));
 
@@ -510,13 +512,15 @@ public class GameActivity extends BaseGameActivity {
         byte[] message = messageToRoom.getBytes() ;
 
         for (Participant p : mParticipants) {
+            if (p.getPlayer() == null){
+                Games.RealTimeMultiplayer.sendReliableMessage(getApiClient(), null, message,
+                        mXORoomID, p.getParticipantId());
+            }else if (! p.getPlayer().getPlayerId().equals(Games.Players.getCurrentPlayerId(getApiClient()) )) {
+                Games.RealTimeMultiplayer.sendReliableMessage(getApiClient(), null, message,
+                        mXORoomID, p.getParticipantId());
+            }
 
-//            if (!p.getParticipantId().equals(mXORoom.getCreatorId())) {
-//                Games.RealTimeMultiplayer.sendReliableMessage(getApiClient(), null, message,
-//                        mXORoomID, p.getParticipantId());
-//            }
         }
-        Games.RealTimeMultiplayer.sendUnreliableMessageToOthers(getApiClient(), message,
-                        mXORoomID);
+
     }
 }

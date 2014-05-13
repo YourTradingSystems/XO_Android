@@ -241,12 +241,12 @@ public class OnlineGameFragment extends Fragment {
                     break;
                 }
                 case X:{
-                    String crossName = "cross_" + "1";
+                    String crossName = "cross" + "1" + "_img" ;
                     imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(crossName, "drawable", parentActivity.getPackageName())));
                     break;
                 }
                 case O:{
-                    String zeroName = "zero_" + "1";
+                    String zeroName = "zero" + "1" + "_img";
                     imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(zeroName, "drawable", parentActivity.getPackageName())));
                     break;
                 }
@@ -258,14 +258,14 @@ public class OnlineGameFragment extends Fragment {
                     if(isMyTurn && fieldValuesArray[position] == FieldValue.Empty ) {
                         if (mySymbole == Constant.MY_SYMBOLE_O) {
 
-                            String zeroName = "zero_" + "1";
+                            String zeroName = "zero" + "1" + "_img";
                             imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(zeroName, "drawable", parentActivity.getPackageName())));
                             fieldValuesArray[position] = FieldValue.O;
                             myTurnWinChecker(position);
                             SoundManager.playSound(parentActivity, Constant.GOES_O_SOUND);
                         } else if (mySymbole == Constant.MY_SYMBOLE_X) {
 
-                            String crossName = "cross_" + "1";
+                            String crossName = "cross" + "1" + "_img";
                             imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(crossName, "drawable", parentActivity.getPackageName())));
                             fieldValuesArray[position] = FieldValue.X;
                             myTurnWinChecker(position);
@@ -368,19 +368,19 @@ public class OnlineGameFragment extends Fragment {
             switch (startY){
                 case 0:{
 
-                    winLineImageView.setPadding(width/5, winLineImageView.getPaddingTop(), winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
+                    winLineImageView.setPadding(0, winLineImageView.getPaddingTop(), winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
                     winLineImageView.requestLayout();
                     break;
                 }
                 case 1:{
 
-                    winLineImageView.setPadding(width/2, winLineImageView.getPaddingTop(), winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
+                    winLineImageView.setPadding(width/3, winLineImageView.getPaddingTop(), winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
                     winLineImageView.requestLayout();
                     break;
                 }
                 case 2:{
 
-                    winLineImageView.setPadding(width - width/5, winLineImageView.getPaddingTop(), winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
+                    winLineImageView.setPadding(width - width/3, winLineImageView.getPaddingTop(), winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
                     winLineImageView.requestLayout();
                     break;
                 }
@@ -394,19 +394,19 @@ public class OnlineGameFragment extends Fragment {
             switch (startX){
                 case 0:{
 
-                    winLineImageView.setPadding(winLineImageView.getPaddingLeft(), width/5, winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
+                    winLineImageView.setPadding(winLineImageView.getPaddingLeft(), 0, winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
                     winLineImageView.requestLayout();
                     break;
                 }
                 case 1:{
 
-                    winLineImageView.setPadding(winLineImageView.getPaddingLeft(), width/2, winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
+                    winLineImageView.setPadding(winLineImageView.getPaddingLeft(), width/3, winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
                     winLineImageView.requestLayout();
                     break;
                 }
                 case 2:{
 
-                    winLineImageView.setPadding(winLineImageView.getPaddingLeft(), width-width/5, winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
+                    winLineImageView.setPadding(winLineImageView.getPaddingLeft(), width - width/3, winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
                     winLineImageView.requestLayout();
                     break;
                 }
