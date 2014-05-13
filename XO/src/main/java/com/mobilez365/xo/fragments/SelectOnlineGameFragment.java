@@ -1,7 +1,6 @@
 package com.mobilez365.xo.fragments;
 
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.mobilez365.xo.R;
+import com.mobilez365.xo.SoundManager;
+import com.mobilez365.xo.util.Constant;
 
 /**
  * Created by BruSD on 06.05.2014.
@@ -17,9 +18,10 @@ import com.mobilez365.xo.R;
 public class SelectOnlineGameFragment extends Fragment implements View.OnClickListener{
     private Button quickGameButton, inviteFriendButton, checkInviteButton;
     private View rootView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_choice_online_game_layout, container, false);
+        rootView = inflater.inflate(R.layout.fragment_choice_online_game_layout, container, false);
         initAllView();
         return rootView;
     }
@@ -45,7 +47,7 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
                 break;
             }
             case R.id.invite_friend_button:{
-                inviteFriend();
+                playWithFriend();
                 break;
             }
             case R.id.pending_invite_button:{
@@ -53,18 +55,19 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
                 break;
             }
         }
+        SoundManager.playSound(getActivity(), Constant.CLICK_SOUND);
     }
 
     private void viewInvite() {
-        getActivity().sendBroadcast(new Intent("viewInvite"));
+        getActivity().sendBroadcast(new Intent(Constant.FILTER_VIEW_INVETATION));
     }
 
-    private void inviteFriend() {
-        getActivity().sendBroadcast(new Intent("inviteFriend"));
+    private void playWithFriend() {
+        getActivity().sendBroadcast(new Intent(Constant.FILTER_PLAY_WITH_FRIEND));
     }
 
     private void startQuickGame() {
-        getActivity().sendBroadcast(new Intent("startQuickGame"));
-        
+        getActivity().sendBroadcast(new Intent(Constant.FILTER_START_QUICK_GAME));
+
     }
 }

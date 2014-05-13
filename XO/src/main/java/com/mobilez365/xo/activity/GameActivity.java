@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
@@ -21,26 +22,41 @@ import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
+import com.mobilez365.xo.GameServiceUtil.BaseGameActivity;
+import com.mobilez365.xo.ai.FieldValue;
 import com.mobilez365.xo.fragments.OnePlayerFragment;
+import com.mobilez365.xo.fragments.OnlineGameFragment;
+import com.mobilez365.xo.fragments.SelectOnlineGameFragment;
 import com.mobilez365.xo.fragments.TwoPlayerFragment;
-import com.mobilez365.xo.gameserviceutil.BaseGameActivity;
+
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.util.Constant;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by BruSD on 05.05.2014.
  */
-public class GameActivity extends BaseGameActivity  {
+public class GameActivity extends BaseGameActivity {
 
-    private CustomBroadcastReceiver mIntReceiver = new CustomBroadcastReceiver();
+    private FromFragmentBroadcastReceiver mIntReceiver = new FromFragmentBroadcastReceiver();
 
+    private List<Participant> mParticipants;
+    public Room mXORoom;
+    private String mXORoomID;
+    private String mMyId;
+    private boolean isFierstMessage = true;
 
+    private int myRundom365;
+    private boolean isMyTurn;
     // request code for the "select players" UI
     // can be any number as long as it's unique
     final static int RC_SELECT_PLAYERS = 10000;
+    // request code (can be any number, as long as it's unique)
+    final  static int RC_INVITATION_INBOX = 10001;
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
@@ -48,7 +64,7 @@ public class GameActivity extends BaseGameActivity  {
 
         int fragmentType  = getIntent().getIntExtra("screenType", -1);
 
-        setFragment(fragmentType);
+        setFragment(fragmentType, null);
     }
 
     @Override
@@ -56,7 +72,11 @@ public class GameActivity extends BaseGameActivity  {
         super.onResume();
 
         IntentFilter filter = new IntentFilter();
-        filter.addAction("viewInvite");
+        filter.addAction(Constant.FILTER_PLAY_WITH_FRIEND);
+        filter.addAction(Constant.FILTER_START_QUICK_GAME);
+        filter.addAction(Constant.FILTER_VIEW_INVETATION);
+        filter.addAction(Constant.FILTER_SEND_MY_STROK);
+        filter.addAction(Constant.FILTER_IS_GAME_CONTINUE);
         registerReceiver(mIntReceiver, filter);
     }
 
@@ -69,15 +89,16 @@ public class GameActivity extends BaseGameActivity  {
     }
 
 
-    private void setFragment( int fragmentType) {
+    private void setFragment( int fragmentType, Bundle bundle) {
 
 
         final Fragment fragment = fragmentFromContentType(fragmentType);
 
 
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.game_frame_layout, fragment);
-            ft.commitAllowingStateLoss();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        fragment.setArguments(bundle);
+        ft.replace(R.id.game_frame_layout, fragment);
+        ft.commitAllowingStateLoss();
 
 
     }
@@ -93,7 +114,12 @@ public class GameActivity extends BaseGameActivity  {
                 break;
             }
             case Constant.SCREEN_TYPE_ONLINE: {
-                fragment = new OnePlayerFragment();
+                fragment = new SelectOnlineGameFragment();
+                break;
+            }
+            case Constant.SCREEN_TYPE_ONLINE_GAME: {
+
+                fragment = new OnlineGameFragment();
                 break;
             }
             default: {
@@ -178,6 +204,28 @@ public class GameActivity extends BaseGameActivity  {
             // prevent screen from sleeping during handshake
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+        if (request == RC_INVITATION_INBOX) {
+            if (response != Activity.RESULT_OK) {
+                // canceled
+                return;
+            }
+
+            // get the selected invitation
+            Bundle extras = data.getExtras();
+            Invitation invitation =
+                    extras.getParcelable(Multiplayer.EXTRA_INVITATION);
+
+            // accept it!
+            RoomConfig roomConfig = makeBasicRoomConfigBuilder()
+                    .setInvitationIdToAccept(invitation.getInvitationId())
+                    .build();
+            Games.RealTimeMultiplayer.join(getApiClient(), roomConfig);
+
+            // prevent screen from sleeping during handshake
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+            // go to game screen
+        }
     }
 
     // create a RoomConfigBuilder that's appropriate for your implementation
@@ -186,6 +234,7 @@ public class GameActivity extends BaseGameActivity  {
                 .setMessageReceivedListener(new XORealTimeMessageReceivedListener())
                 .setRoomStatusUpdateListener(new XORoomStatusUpdateListener());
     }
+
     class XORoomUpdateListener implements RoomUpdateListener{
         final static int RC_WAITING_ROOM = 10002;
 
@@ -200,6 +249,8 @@ public class GameActivity extends BaseGameActivity  {
             // get waiting room intent
             Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(getApiClient(), room, Integer.MAX_VALUE);
             startActivityForResult(i, RC_WAITING_ROOM);
+
+
         }
 
         @Override
@@ -232,13 +283,7 @@ public class GameActivity extends BaseGameActivity  {
 
 
 
-    class XORealTimeMessageReceivedListener implements RealTimeMessageReceivedListener{
 
-        @Override
-        public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
-            Log.v("XO", realTimeMessage.getMessageData().toString());
-        }
-    }
 
     class XORoomStatusUpdateListener implements RoomStatusUpdateListener{
         // are we already playing?
@@ -272,6 +317,17 @@ public class GameActivity extends BaseGameActivity  {
             }
             else if (shouldStartGame(room)) {
                 // start game!
+                isFierstMessage = true;
+
+                mParticipants = room.getParticipants();
+                mXORoomID = room.getRoomId();
+
+                mXORoom = room;
+                mMyId = Games.Players.getCurrentPlayerId(mHelper.getApiClient());
+
+                sendMessageToAllInRoom(String.valueOf(myRundom365));
+
+
             }
         }
 
@@ -351,13 +407,116 @@ public class GameActivity extends BaseGameActivity  {
         }
     }
 
+    private void startGameOfTruth() {
 
-    private class CustomBroadcastReceiver  extends BroadcastReceiver {
+        Bundle bundle = new Bundle();
+
+        bundle.putBoolean(Constant.INTENT_KEY_IS_MY_TURN, isMyTurn);
+
+        setFragment(Constant.SCREEN_TYPE_ONLINE_GAME , bundle);
+
+
+
+
+    }
+
+
+    private class FromFragmentBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("viewInvite")) {
+
+            if (intent.getAction().equals(Constant.FILTER_START_QUICK_GAME)) {
+                setMyRundom365();
+                startQuickGame();
+            }else if(intent.getAction().equals(Constant.FILTER_PLAY_WITH_FRIEND)){
+                setMyRundom365();
+                inviteFriend();
+            }else if(intent.getAction().equals(Constant.FILTER_VIEW_INVETATION)){
+                viewInitation();
+
+            } else if(intent.getAction().equals(Constant.FILTER_SEND_MY_STROK)){
+                String message = intent.getStringExtra(Constant.INTENT_KEY_MY_STROK);
+                sendMessageToAllInRoom(message);
+            }else if(intent.getAction().equals(Constant.FILTER_IS_GAME_CONTINUE)){
+                String message = intent.getStringExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE);
+                if(message.equals("yes")) {
+                    sendMessageToAllInRoom(message);
+                }else {
+                    sendMessageToAllInRoom(message);
+                    setFragment(Constant.SCREEN_TYPE_ONLINE, null);
+                }
 
             }
         }
+    }
+
+    private void setMyRundom365(){
+        Random r = new Random();
+        myRundom365 = r.nextInt(365);
+
+    }
+
+    private void viewInitation(){
+
+
+// launch the intent to show the invitation inbox screen
+        Intent intent = Games.Invitations.getInvitationInboxIntent(getApiClient());
+        startActivityForResult(intent, RC_INVITATION_INBOX);
+    }
+    class XORealTimeMessageReceivedListener implements RealTimeMessageReceivedListener{
+
+        @Override
+        public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
+            byte[] bytes = realTimeMessage.getMessageData();
+            Log.v("XO","get Message");
+            String str = null;
+            try {
+                str = new String(bytes, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                Log.v("XO", e.toString());
+            }
+            if (isFierstMessage){
+                checkHowFirst(str);
+                if(!isFierstMessage){
+                    startGameOfTruth();
+                }
+            }else if (str.equals("yes") || str.equals("no")){
+                Intent intent =  new Intent(Constant.FF_IS_GAME_CONTINUE_OPPONENT_OPINION);
+                intent.putExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE, str );
+                sendBroadcast(intent);
+            }else {
+                Intent intent =  new Intent(Constant.FF_OPONENT_STROK);
+                intent.putExtra(Constant.INTENT_KEY_OPONENT_STROK, str );
+                sendBroadcast(intent);
+            }
+        }
+    }
+
+    private void checkHowFirst(String oponentMess) {
+        int oponentRundom365 =  Integer.valueOf(oponentMess);
+        if (oponentRundom365 > myRundom365){
+            isMyTurn = false;
+            isFierstMessage = false;
+        }else if(oponentRundom365 < myRundom365){
+            isMyTurn = true;
+            isFierstMessage = false;
+        }else if(oponentRundom365 == myRundom365){
+            setMyRundom365();
+            sendMessageToAllInRoom(String.valueOf(myRundom365));
+        }
+    }
+
+    private void sendMessageToAllInRoom(String messageToRoom){
+        byte[] message = messageToRoom.getBytes() ;
+
+        for (Participant p : mParticipants) {
+
+//            if (!p.getParticipantId().equals(mXORoom.getCreatorId())) {
+//                Games.RealTimeMultiplayer.sendReliableMessage(getApiClient(), null, message,
+//                        mXORoomID, p.getParticipantId());
+//            }
+        }
+        Games.RealTimeMultiplayer.sendUnreliableMessageToOthers(getApiClient(), message,
+                        mXORoomID);
     }
 }

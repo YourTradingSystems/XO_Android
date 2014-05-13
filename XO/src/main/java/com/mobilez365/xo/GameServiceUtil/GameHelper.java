@@ -1,4 +1,4 @@
-package com.mobilez365.xo.gameserviceutil;
+package com.mobilez365.xo.GameServiceUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;

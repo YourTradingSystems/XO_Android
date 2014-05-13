@@ -56,7 +56,8 @@ public class GameChecker {
                         jStart = j;
                     jEnd = j;
                 }
-                else {
+
+                if (j == size - 1 || gameField[i][j] != side) {
                     if (jStart >= 0 && jEnd >=0 && jEnd - jStart + 1 == countInRowToWin)
                         return createBundle(i, jStart, i, jEnd, side);
 
@@ -77,7 +78,8 @@ public class GameChecker {
                         iStart = i;
                     iEnd = i;
                 }
-                else {
+
+                if (i == size - 1 || gameField[i][j] != side) {
                     if (iStart >= 0 && iEnd >= 0 && iEnd - iStart + 1 == countInRowToWin)
                         return createBundle(iStart, j, iEnd, j, side);
 
@@ -126,7 +128,7 @@ public class GameChecker {
         result.putInt(COORDINATE_START_Y, y1);
         result.putInt(COORDINATE_END_X, x2);
         result.putInt(COORDINATE_END_Y, y2);
-        result.putString(WIN_SYMBOL, side == FieldValue.X ? "x" : "o");
+        result.putString(WIN_SYMBOL, side == FieldValue.X ? "X" : "O");
         return result;
     }
 

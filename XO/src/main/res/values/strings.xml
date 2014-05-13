@@ -25,7 +25,7 @@
 
     <!--Main Menu-->
     <string name="main_menu_one_player">1 PLAYER</string>
-    <string name="main_menu_two_player">2 PLAYER</string>
+    <string name="main_menu_two_player">2 PLAYERS</string>
     <string name="main_menu_play_online">PLAY ONLINE</string>
     <string name="main_menu_about">ABOUT</string>
     <string name="main_menu_leaderboard">LEADERBOARD</string>

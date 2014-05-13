@@ -5,21 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@android:color/white">
+    android:background="@drawable/bg">
     <Button
         android:id="@+id/quick_game_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/quick_game_string"/>
+        android:text="@string/quick_game_string"
+        android:background="@drawable/cell_music_bg"
+        android:textSize="25dp"
+        android:padding="10dp"/>
     <Button
         android:id="@+id/invite_friend_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/invite_friend_string"/>
+        android:text="@string/invite_friend_string"
+        android:background="@drawable/cell_push_bg"
+        android:textSize="25dp"
+        android:padding="10dp"/>
     <Button
         android:id="@+id/pending_invite_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/chech_invte_string"/>
+        android:text="@string/chech_invte_string"
+        android:background="@drawable/cell_sound_bg"
+        android:textSize="25dp"
+        android:padding="10dp"/>
 
 </LinearLayout>

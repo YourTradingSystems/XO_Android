@@ -1,4 +1,4 @@
-package com.mobilez365.xo.gameserviceutil;
+package com.mobilez365.xo.GameServiceUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.mobilez365.xo.LifecycleBaseActivity;
+import com.mobilez365.xo.GameServiceUtil.GameHelper;
 
 /**
  * Created by BruSD on 05.05.2014.

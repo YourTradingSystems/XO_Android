@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.plus.Plus;
 import com.mobilez365.xo.SoundManager;
-import com.mobilez365.xo.gameserviceutil.BaseGameActivity;
+import com.mobilez365.xo.GameServiceUtil.BaseGameActivity;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.util.Constant;
 
