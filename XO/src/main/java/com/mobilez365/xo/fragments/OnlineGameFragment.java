@@ -1,17 +1,13 @@
 package com.mobilez365.xo.fragments;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -23,18 +19,17 @@ import android.view.View;
 
 
 import android.view.ViewGroup;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.Room;
-import com.google.android.gms.plus.Plus;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.activity.GameActivity;
@@ -47,6 +42,9 @@ import com.squareup.picasso.Target;
 
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -66,16 +64,26 @@ public class OnlineGameFragment extends Fragment {
 
     private String isGameContinueByMe, isGameContinueByOpponent =  new String();
 
+    private Timer gameTimer,  waitinTimer;
+    private static final int timeToStrock = 30;
+    private static final int timeToContinueGame = 10;
+    private int timerCountToStrock;
+    private int timerCountToContinueGame;
 
-
-    private TextView myUserNameTextView, oponentUserNameTextView, mySignTextView, oponentSignTextView;
+    private TextView myUserNameTextView, oponentUserNameTextView, mySignTextView, oponentSignTextView, timerTextView;
     private ImageView  myAvatarImageView, oponentAvatarImageView, winLineImageView;
+    private Button noContinueButton, yesContinueButton;
+    private TextView infoYourTheyTornTextView, continueTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
         parentActivity = getActivity();
-
+        timerCountToStrock = timeToStrock;
+        SoundManager.initSound(parentActivity, Constant.LOSE_SOUND);
+        SoundManager.initSound(parentActivity, Constant.WIN_SOUND);
+        SoundManager.initSound(parentActivity, Constant.GOES_X__SOUND);
+        SoundManager.initSound(parentActivity, Constant.GOES_O_SOUND);
         initialAllView();
 
         initFieldValues();
@@ -110,18 +118,83 @@ public class OnlineGameFragment extends Fragment {
         oponentAvatarImageView = (ImageView)rootView.findViewById(R.id.oponent_avatar_image_view_game_fragment);
 
         winLineImageView = (ImageView)rootView.findViewById(R.id.win_line_image_view);
+        timerTextView = (TextView)rootView.findViewById(R.id.timer_text_view_game_fragment);
+
+        // notification panel
+
+        noContinueButton = (Button)rootView.findViewById(R.id.no_continue_button);
+        yesContinueButton = (Button)rootView.findViewById(R.id.yes_continue_button);
+        infoYourTheyTornTextView = (TextView) rootView.findViewById(R.id.info_your_they_torn_text_view);
+        continueTextView = (TextView) rootView.findViewById(R.id.continue_text_view);
     }
 
     private void fillDataInView() {
+        timerCountToStrock = timeToStrock;
+        gameTimer = new Timer();
+
+
         if (mySign == Constant.MY_SYMBOLE_X){
             mySignTextView.setText("X");
+            infoYourTheyTornTextView.setText(parentActivity.getString(R.string.your_torn_string));
             oponentSignTextView.setText("O");
         }else {
             mySignTextView.setText("O");
+            infoYourTheyTornTextView.setText(parentActivity.getString(R.string.they_torn_string));
             oponentSignTextView.setText("X");
         }
         winLineImageView.setImageDrawable(getResources().getDrawable(R.drawable.zero_field));
+
+        noContinueButton.setVisibility(View.INVISIBLE);
+        yesContinueButton.setVisibility(View.INVISIBLE);
+        continueTextView.setVisibility(View.INVISIBLE);
+
+        gameTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                TimerGameMethod();
+            }
+        }, 0, 1000);
+
     }
+
+    private void TimerGameMethod()
+    {
+        //This method is called directly by the timer
+        //and runs in the same thread as the timer.
+
+        //We call the method that will work with the UI
+        //through the runOnUiThread method.
+        parentActivity.runOnUiThread(Timer_Tick);
+    }
+    private Runnable Timer_Tick = new Runnable() {
+        public void run() {
+
+            if (timerCountToStrock != 0){
+                if (timerCountToStrock <10){
+                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.holo_red_dark));
+                }else{
+                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.black));
+                }
+                    timerTextView.setText(String.valueOf(timerCountToStrock));
+            }else {
+                timerTextView.setText(String.valueOf(timerCountToStrock));
+                gameTimer.cancel();
+                endGameByTimer();
+
+            }
+            timerCountToStrock = timerCountToStrock - 1;
+        }
+    };
+
+    private void endGameByTimer() {
+        if (isMyTurn){
+            showLoseMessage();
+        }else {
+            showWinMessage();
+        }
+
+    }
+
     private void fillPlayersData()  {
         Room room = ((GameActivity) parentActivity).mXORoom;
         ArrayList<Participant> mParticipants =  room.getParticipants();
@@ -241,12 +314,15 @@ public class OnlineGameFragment extends Fragment {
                     break;
                 }
                 case X:{
-                    String crossName = "cross" + "1" + "_img" ;
+
+
+                    String crossName = "cross" + 1 + "_img" ;
                     imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(crossName, "drawable", parentActivity.getPackageName())));
                     break;
                 }
                 case O:{
-                    String zeroName = "zero" + "1" + "_img";
+
+                    String zeroName = "zero" + 1 + "_img";
                     imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(zeroName, "drawable", parentActivity.getPackageName())));
                     break;
                 }
@@ -256,22 +332,30 @@ public class OnlineGameFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if(isMyTurn && fieldValuesArray[position] == FieldValue.Empty ) {
+                        infoYourTheyTornTextView.setText(parentActivity.getString(R.string.they_torn_string));
                         if (mySymbole == Constant.MY_SYMBOLE_O) {
 
-                            String zeroName = "zero" + "1" + "_img";
+                            Random random = new Random();
+                            int randomID = random.nextInt(3) + 1;
+
+                            String zeroName = "zero" + 1 + "_img";
+
                             imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(zeroName, "drawable", parentActivity.getPackageName())));
                             fieldValuesArray[position] = FieldValue.O;
                             myTurnWinChecker(position);
                             SoundManager.playSound(parentActivity, Constant.GOES_O_SOUND);
                         } else if (mySymbole == Constant.MY_SYMBOLE_X) {
+                            Random random = new Random();
+                            int randomID = random.nextInt(4) + 1;
 
-                            String crossName = "cross" + "1" + "_img";
+                            String crossName = "cross" + 1 + "_img";
                             imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(crossName, "drawable", parentActivity.getPackageName())));
                             fieldValuesArray[position] = FieldValue.X;
                             myTurnWinChecker(position);
                             SoundManager.playSound(parentActivity, Constant.GOES_X__SOUND);
 
                         }
+
                         v.setEnabled(false);
                     }
                 }
@@ -289,7 +373,6 @@ public class OnlineGameFragment extends Fragment {
     private void myTurnWinChecker(int position){
         winChecker();
 
-
         int xPosition =  position / 3;
         int yPosition = position - xPosition*3;
         String message = String.valueOf(xPosition)+ String.valueOf(yPosition);
@@ -299,6 +382,7 @@ public class OnlineGameFragment extends Fragment {
         parentActivity.sendBroadcast(intent);
 
         isMyTurn = false;
+
 
     }
 
@@ -327,6 +411,7 @@ public class OnlineGameFragment extends Fragment {
     }
 
     private void winChecker() {
+        timerCountToStrock = timeToStrock;
         fieldArrayToMarix();
         Bundle bundle = GameChecker.chechForWinCombination(fieldValuesMatrix, 3);
         if (bundle != null){
@@ -339,6 +424,7 @@ public class OnlineGameFragment extends Fragment {
             }else if (winerSymbole.equals("O")){
                 showEndGameDialog(Constant.MY_SYMBOLE_O);
             }
+            gameTimer.cancel();
         }else {
             boolean isNoWay = true;
             for (int i = 0; i < fieldValuesArray.length; i ++){
@@ -348,6 +434,7 @@ public class OnlineGameFragment extends Fragment {
                 }
             }
             if (isNoWay){
+                gameTimer.cancel();
                 showEndGameDialog(-1);
             }
         }
@@ -358,6 +445,7 @@ public class OnlineGameFragment extends Fragment {
         int endX = bundle.getInt(GameChecker.COORDINATE_END_X);
         int startY = bundle.getInt(GameChecker.COORDINATE_START_Y);
         int endY = bundle.getInt(GameChecker.COORDINATE_END_Y);
+
 
         if (startY == endY){
             winLineImageView.setImageDrawable(getResources().getDrawable(R.drawable.line_vertical));
@@ -430,6 +518,12 @@ public class OnlineGameFragment extends Fragment {
 
             if(intent.getAction().equals(Constant.FF_OPONENT_STROK)){
                 String oponentStrok = intent.getStringExtra(Constant.INTENT_KEY_OPONENT_STROK);
+                infoYourTheyTornTextView.setText(parentActivity.getString(R.string.your_torn_string));
+                if (mySign == Constant.MY_SYMBOLE_X ){
+                    SoundManager.playSound(parentActivity, Constant.GOES_O_SOUND);
+                }else {
+                    SoundManager.playSound(parentActivity, Constant.GOES_X__SOUND);
+                }
                 putOponentStrok(oponentStrok);
             }else if(intent.getAction().equals(Constant.FF_IS_GAME_CONTINUE_OPPONENT_OPINION)){
                 String oponentStrok = intent.getStringExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE);
@@ -460,79 +554,126 @@ public class OnlineGameFragment extends Fragment {
     }
 
     private void showEndGameDialog (int winerStatus ){
+        timerCountToContinueGame = timeToContinueGame;
+        waitinTimer = new Timer();
+        waitinTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                TimerWaitingMethod();
+            }
+        }, 0, 1000);
+
         switch (winerStatus){
             case -1:{
-                showDrawDialog();
+                showDrawMessage();
                 break;
             }
             default:{
                 if (mySign == winerStatus){
-                    showWinDialog();
+                    showWinMessage();
                 }else {
-                    showLoseDialog();
+                    showLoseMessage();
                 }
                 break;
             }
 
         }
     }
-    private void showWinDialog(){
+    private void TimerWaitingMethod()
+    {
+        //This method is called directly by the timer
+        //and runs in the same thread as the timer.
+
+        //We call the method that will work with the UI
+        //through the runOnUiThread method.
+        parentActivity.runOnUiThread(Timer_Tick_Waiting);
+    }
+    private Runnable Timer_Tick_Waiting = new Runnable() {
+        public void run() {
+
+            if (timerCountToContinueGame != 0){
+                if (timerCountToContinueGame <10){
+                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.holo_red_dark));
+                }else{
+                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.black));
+                }
+                timerTextView.setText(String.valueOf(timerCountToContinueGame));
+            }else {
+                timerTextView.setText(String.valueOf(timerCountToContinueGame));
+                waitinTimer.cancel();
+                cancelGame();
+
+            }
+            timerCountToContinueGame = timerCountToContinueGame - 1;
+        }
+    };
+    private void showWinMessage(){
+
         SoundManager.playSound(parentActivity, Constant.WIN_SOUND);
-        dialog = new  AlertDialog.Builder(parentActivity);
-        dialog.setTitle("You Win");
-        dialog.setCancelable(false);
-        dialog.setPositiveButton("Yes", new YesOnClickButtonListener());
-        dialog.setNegativeButton("No", new NoOnClickButtonListener());
-        dialog.setMessage("Continue?");
-        dialog.create().show();
+        infoYourTheyTornTextView.setText(parentActivity.getString(R.string.win_string));
+
+        continueNotificationShow();
+
 
     }
-    private void showLoseDialog(){
+    private void showLoseMessage(){
         SoundManager.playSound(parentActivity, Constant.LOSE_SOUND);
-        dialog = new AlertDialog.Builder(parentActivity);
-        dialog.setTitle("You Lose");
-        dialog.setCancelable(false);
-        dialog.setPositiveButton("Yes", new YesOnClickButtonListener());
-        dialog.setNegativeButton("No", new NoOnClickButtonListener());
-        dialog.setMessage("Continue?");
-        dialog.create().show();
+        infoYourTheyTornTextView.setText(parentActivity.getString(R.string.lose_string));
+
+        continueNotificationShow();
     }
-    private void showDrawDialog(){
+    private void showDrawMessage(){
         SoundManager.playSound(parentActivity, Constant.LOSE_SOUND);
-        dialog = new AlertDialog.Builder(parentActivity);
-        dialog.setTitle("Draw Game");
-        dialog.setCancelable(false);
-        dialog.setPositiveButton("Yes", new YesOnClickButtonListener());
-        dialog.setNegativeButton("No", new NoOnClickButtonListener());
-        dialog.setMessage("Continue?");
-        dialog.create().show();
+
+        infoYourTheyTornTextView.setText(parentActivity.getString(R.string.draw_game_string));
+        continueNotificationShow();
+
+    }
+    private void continueNotificationShow(){
+        noContinueButton.setOnClickListener(new NoOnClickButtonListener());
+        noContinueButton.setVisibility(View.VISIBLE);
+
+        yesContinueButton.setOnClickListener(new YesOnClickButtonListener());
+        yesContinueButton.setVisibility(View.VISIBLE);
+
+        continueTextView.setText(parentActivity.getString(R.string.continue_string));
+        continueTextView.setVisibility(View.VISIBLE);
     }
 
-    private class YesOnClickButtonListener implements DialogInterface.OnClickListener{
+    private class YesOnClickButtonListener implements View.OnClickListener{
 
         @Override
-        public void onClick(DialogInterface dialog, int which) {
+        public void onClick(View v) {
             Intent intent =  new Intent(Constant.FILTER_IS_GAME_CONTINUE);
             intent.putExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE, "yes" );
             parentActivity.sendBroadcast(intent);
             isGameContinueByMe = "yes";
+            waitingOpponentRespond();
             checkOpponentOpinion();
+
             SoundManager.playSound(parentActivity, Constant.CLICK_SOUND);
-            dialog.dismiss();
         }
+    }
+    private void waitingOpponentRespond(){
+        noContinueButton.setVisibility(View.INVISIBLE);
+        yesContinueButton.setVisibility(View.INVISIBLE);
+        continueTextView.setVisibility(View.INVISIBLE);
+        infoYourTheyTornTextView.setText(parentActivity.getString(R.string.waiting_opponent_string));
     }
 
 
-
-    private class NoOnClickButtonListener implements DialogInterface.OnClickListener{
+    private void cancelGame(){
+        Intent intent =  new Intent(Constant.FILTER_IS_GAME_CONTINUE);
+        intent.putExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE, "no" );
+        parentActivity.sendBroadcast(intent);
+    }
+    private class NoOnClickButtonListener implements View.OnClickListener{
 
         @Override
-        public void onClick(DialogInterface dialog, int which) {
-            Intent intent =  new Intent(Constant.FILTER_IS_GAME_CONTINUE);
-            intent.putExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE, "no" );
-            parentActivity.sendBroadcast(intent);
+        public void onClick(View v) {
+            cancelGame();
+            waitinTimer.cancel();
             SoundManager.playSound(parentActivity, Constant.CLICK_SOUND);
-            dialog.dismiss();
         }
     }
 
@@ -543,13 +684,16 @@ public class OnlineGameFragment extends Fragment {
 
     private void checkOpponentOpinion() {
         if (isGameContinueByOpponent != null && isGameContinueByMe != null){
+            waitinTimer.cancel();
             if (isGameContinueByOpponent.equals("yes") && isGameContinueByMe.equals("yes")){
+
                 initNewGame();
             } else if (isGameContinueByOpponent.equals("no")){
                 Intent intent =  new Intent(Constant.FILTER_IS_GAME_CONTINUE);
                 intent.putExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE, "no" );
                 parentActivity.sendBroadcast(intent);
             }
+
         }
     }
     private void initNewGame(){

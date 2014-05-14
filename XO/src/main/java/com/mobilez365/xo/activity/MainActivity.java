@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.GameServiceUtil.BaseGameActivity;
@@ -20,7 +21,7 @@ import com.mobilez365.xo.util.Constant;
  */
 public class MainActivity extends BaseGameActivity implements View.OnClickListener{
 
-    private TextView onePlayerButton, twoPlayerButton, onlinePlayButton, aboutButton, settingsButton;
+    private TextView onePlayerButton, twoPlayerButton, onlinePlayButton, aboutButton, settingsButton, leaderBoardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +40,14 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         onlinePlayButton = (TextView) findViewById(R.id.main_activity_play_online);
         aboutButton = (TextView) findViewById(R.id.main_activity_about);
         settingsButton = (Button) findViewById(R.id.main_activity_settings);
+        leaderBoardButton = (Button) findViewById(R.id.main_activity_leaderboard);
 
         onePlayerButton.setOnClickListener(this);
         twoPlayerButton.setOnClickListener(this);
         onlinePlayButton.setOnClickListener(this);
         aboutButton.setOnClickListener(this);
         settingsButton.setOnClickListener(this);
-
+        leaderBoardButton.setOnClickListener(this);
 
         //Views
 
@@ -79,6 +81,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             }
             case R.id.main_activity_about:{
                 startActivity(new Intent(this, AboutActivity.class));
+                break;
+            }
+            case R.id.main_activity_leaderboard:{
+                if(isSignedIn()){
+                    startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getApiClient(), getString(R.string.leader_board_id)), 2);
+                }
                 break;
             }
         }

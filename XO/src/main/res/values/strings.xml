@@ -1,4 +1,7 @@
 <resources>
+    //IDs for game service
+    <string name="leader_board_id">CgkI7qvx050DEAIQBg</string>
+
     <string name="app_name">XO</string>
     <string name="settings_label">Settings</string>
 
@@ -37,5 +40,16 @@
     <string name="settings_music">Music</string>
     <string name="settings_push">Push</string>
     <string name="settings_analytics">Google Analytics</string>
+
+    <!--Game Screen Strings-->
+    <string name="no_string">No</string>
+    <string name="yes_string">Yes</string>
+    <string name="your_torn_string">Your Turn!</string>
+    <string name="they_torn_string">Their Turn!</string>
+    <string name="win_string">You Win!</string>
+    <string name="lose_string">You Lose!</string>
+    <string name="draw_game_string">Draw Game!</string>
+    <string name="continue_string">Continue?</string>
+    <string name="waiting_opponent_string">Waiting Opponent</string>
 
 </resources>
