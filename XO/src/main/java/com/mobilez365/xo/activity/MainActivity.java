@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
+import com.mobilez365.xo.GameServiceUtil.AppStateManagerUtil;
 import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.GameServiceUtil.BaseGameActivity;
 import com.mobilez365.xo.R;

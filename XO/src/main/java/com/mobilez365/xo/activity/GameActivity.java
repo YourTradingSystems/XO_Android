@@ -65,6 +65,8 @@ public class GameActivity extends BaseGameActivity {
         int fragmentType  = getIntent().getIntExtra("screenType", -1);
 
         setFragment(fragmentType, null);
+
+
     }
 
     @Override
@@ -493,7 +495,7 @@ public class GameActivity extends BaseGameActivity {
         @Override
         public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
             byte[] bytes = realTimeMessage.getMessageData();
-            Log.v("XO","get Message");
+
             String str = null;
             try {
                 str = new String(bytes, "UTF-8");

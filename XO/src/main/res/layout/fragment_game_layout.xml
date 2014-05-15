@@ -71,11 +71,53 @@
         <RelativeLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/count_bg"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_centerInParent="true">
+                <TextView
+                    android:id="@+id/second_count_my_score_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="30sp"/>
+                <TextView
+                    android:id="@+id/first_count_my_score_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="30sp"/>
+                <TextView
+                    android:id="@+id/second_count_opponent_score_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="30sp"/>
+                <TextView
+                    android:id="@+id/first_count_opponent_score_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="30sp"/>
+
+                </LinearLayout>
             </RelativeLayout>
         <LinearLayout
             android:orientation="horizontal"

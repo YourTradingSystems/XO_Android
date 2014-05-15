@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.Room;
+import com.mobilez365.xo.GameServiceUtil.AppStateManagerUtil;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.activity.GameActivity;
@@ -54,7 +55,7 @@ public class OnlineGameFragment extends Fragment {
 
     private FromActivityBroadcastReceiver mIntReceiver = new FromActivityBroadcastReceiver();
     private boolean isMyTurn;
-    private AlertDialog.Builder dialog;
+
     private View rootView;
     private Activity parentActivity;
     private int mySign;
@@ -71,15 +72,22 @@ public class OnlineGameFragment extends Fragment {
     private int timerCountToContinueGame;
 
     private TextView myUserNameTextView, oponentUserNameTextView, mySignTextView, oponentSignTextView, timerTextView;
+    private TextView myScoreFirstCounterTextView, myScoreSecondCounterTextView, opponentScoreFirstCounterTextView, opponentScoreSecondCounterTextView;
     private ImageView  myAvatarImageView, oponentAvatarImageView, winLineImageView;
     private Button noContinueButton, yesContinueButton;
     private TextView infoYourTheyTornTextView, continueTextView;
+    private int myWinsThisGame, oponentWinsThisGame;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
         parentActivity = getActivity();
+
+        AppStateManagerUtil.init(((GameActivity)parentActivity).getGameHelper().getApiClient(), parentActivity);
+
         timerCountToStrock = timeToStrock;
+        myWinsThisGame = 0;
+        oponentWinsThisGame = 0;
         SoundManager.initSound(parentActivity, Constant.LOSE_SOUND);
         SoundManager.initSound(parentActivity, Constant.WIN_SOUND);
         SoundManager.initSound(parentActivity, Constant.GOES_X__SOUND);
@@ -121,11 +129,30 @@ public class OnlineGameFragment extends Fragment {
         timerTextView = (TextView)rootView.findViewById(R.id.timer_text_view_game_fragment);
 
         // notification panel
-
         noContinueButton = (Button)rootView.findViewById(R.id.no_continue_button);
         yesContinueButton = (Button)rootView.findViewById(R.id.yes_continue_button);
         infoYourTheyTornTextView = (TextView) rootView.findViewById(R.id.info_your_they_torn_text_view);
         continueTextView = (TextView) rootView.findViewById(R.id.continue_text_view);
+
+        //score counter
+        myScoreFirstCounterTextView = (TextView)rootView.findViewById(R.id.first_count_my_score_text_view);
+        myScoreSecondCounterTextView =  (TextView)rootView.findViewById(R.id.second_count_my_score_text_view);
+        opponentScoreFirstCounterTextView = (TextView)rootView.findViewById(R.id.first_count_opponent_score_text_view);
+        opponentScoreSecondCounterTextView = (TextView)rootView.findViewById(R.id.second_count_opponent_score_text_view);
+    }
+
+    private void fillScoreView(){
+        if (myWinsThisGame < 10){
+            myScoreFirstCounterTextView.setText(String.valueOf(myWinsThisGame));
+        }else {
+
+        }
+
+        if (oponentWinsThisGame < 10){
+            opponentScoreFirstCounterTextView.setText(String.valueOf(oponentWinsThisGame));
+        }else {
+
+        }
     }
 
     private void fillDataInView() {
@@ -142,6 +169,7 @@ public class OnlineGameFragment extends Fragment {
             infoYourTheyTornTextView.setText(parentActivity.getString(R.string.they_torn_string));
             oponentSignTextView.setText("X");
         }
+
         winLineImageView.setImageDrawable(getResources().getDrawable(R.drawable.zero_field));
 
         noContinueButton.setVisibility(View.INVISIBLE);
@@ -197,57 +225,60 @@ public class OnlineGameFragment extends Fragment {
 
     private void fillPlayersData()  {
         Room room = ((GameActivity) parentActivity).mXORoom;
-        ArrayList<Participant> mParticipants =  room.getParticipants();
+        if (room != null) {
+            ArrayList<Participant> mParticipants = room.getParticipants();
 
-        for (Participant p : mParticipants) {
+            for (Participant p : mParticipants) {
 
-            if (!p.getParticipantId().equals(room.getCreatorId())) {
-                oponentUserNameTextView.setText(p.getDisplayName());
-                String photoLinkGPlus = p.getIconImageUrl();
+                if (!p.getParticipantId().equals(room.getCreatorId())) {
+                    oponentUserNameTextView.setText(p.getDisplayName());
+                    String photoLinkGPlus = p.getIconImageUrl();
 
-                Picasso.with(parentActivity).load(photoLinkGPlus).into(new Target() {
+                    Picasso.with(parentActivity).load(photoLinkGPlus).into(new Target() {
 
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        oponentAvatarImageView.setImageBitmap(GlobalHelper.getRoundedShape(bitmap));
-                    }
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            oponentAvatarImageView.setImageBitmap(GlobalHelper.getRoundedShape(bitmap));
+                        }
 
-                    @Override
-                    public void onBitmapFailed(final Drawable errorDrawable) {
-                        Log.d("TAG", "FAILED");
-                    }
+                        @Override
+                        public void onBitmapFailed(final Drawable errorDrawable) {
+                            Log.d("TAG", "FAILED");
+                        }
 
-                    @Override
-                    public void onPrepareLoad(final Drawable placeHolderDrawable) {
-                        Log.d("TAG", "Prepare Load");
-                    }
-                });
+                        @Override
+                        public void onPrepareLoad(final Drawable placeHolderDrawable) {
+                            Log.d("TAG", "Prepare Load");
+                        }
+                    });
 
 
+                } else {
+                    myUserNameTextView.setText(p.getDisplayName());
 
-            }else {
-                myUserNameTextView.setText(p.getDisplayName());
+                    String photoLinkGPlus = p.getIconImageUrl();
 
-                String photoLinkGPlus = p.getIconImageUrl();
+                    Picasso.with(parentActivity).load(photoLinkGPlus).into(new Target() {
 
-                Picasso.with(parentActivity).load(photoLinkGPlus).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            myAvatarImageView.setImageBitmap(GlobalHelper.getRoundedShape(bitmap));
+                        }
 
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        myAvatarImageView.setImageBitmap(GlobalHelper.getRoundedShape(bitmap));
-                    }
+                        @Override
+                        public void onBitmapFailed(final Drawable errorDrawable) {
+                            Log.d("TAG", "FAILED");
+                        }
 
-                    @Override
-                    public void onBitmapFailed(final Drawable errorDrawable) {
-                        Log.d("TAG", "FAILED");
-                    }
-
-                    @Override
-                    public void onPrepareLoad(final Drawable placeHolderDrawable) {
-                        Log.d("TAG", "Prepare Load");
-                    }
-                });
+                        @Override
+                        public void onPrepareLoad(final Drawable placeHolderDrawable) {
+                            Log.d("TAG", "Prepare Load");
+                        }
+                    });
+                }
             }
+        }else {
+
         }
     }
 
@@ -576,8 +607,8 @@ public class OnlineGameFragment extends Fragment {
                 }
                 break;
             }
-
         }
+        fillScoreView();
     }
 
     private void TimerWaitingMethod()
@@ -610,7 +641,8 @@ public class OnlineGameFragment extends Fragment {
     };
 
     private void showWinMessage(){
-
+        myWinsThisGame++;
+        AppStateManagerUtil.updateOlineProgressAppState();
         SoundManager.playSound(parentActivity, Constant.WIN_SOUND);
         infoYourTheyTornTextView.setText(parentActivity.getString(R.string.win_string));
 
@@ -620,6 +652,7 @@ public class OnlineGameFragment extends Fragment {
     }
 
     private void showLoseMessage(){
+        oponentWinsThisGame++;
         SoundManager.playSound(parentActivity, Constant.LOSE_SOUND);
         infoYourTheyTornTextView.setText(parentActivity.getString(R.string.lose_string));
 
@@ -717,6 +750,7 @@ public class OnlineGameFragment extends Fragment {
             mySign = Constant.MY_SYMBOLE_X;
             isMyTurn = true;
         }
+
         winLineImageView.setImageDrawable(getResources().getDrawable(R.drawable.zero_field));
         winLineImageView.setPadding(0,0,0,0);
         winLineImageView.requestLayout();
