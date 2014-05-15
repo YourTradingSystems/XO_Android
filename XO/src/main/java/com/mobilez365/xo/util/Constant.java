@@ -4,11 +4,18 @@ package com.mobilez365.xo.util;
  * Created by BruSD on 06.05.2014.
  */
 public class Constant {
+
+    // AILevel
+    public static final int AI_EASY = 0;
+    public static final int AI_MEDIUM = 1;
+    public static final int AI_HARD = 2;
+
     //Screen Type
     public static final int SCREEN_TYPE_ONE_PLAYER = 0;
     public static final int SCREEN_TYPE_TWO_PLAYER= 1;
     public static final int SCREEN_TYPE_ONLINE = 2;
     public static final int SCREEN_TYPE_ONLINE_GAME = 3;
+    public static final int SCREEN_AI_GAME = 4;
 
     public static final int CLICK_SOUND = 1;
     public static final int WIN_SOUND = 2;
@@ -23,6 +30,10 @@ public class Constant {
     public static final String PREF_NAME            = "com.mobilez365.xo.appSettings";
 
     //Recivers Type for Activity
+
+    public static final String FILTER_VIEW_EASY = "com.mobilez365.xo.easy";
+    public static final String FILTER_VIEW_MEDIUM = "com.mobilez365.xo.medium";
+    public static final String FILTER_VIEW_HARD = "com.mobilez365.xo.hard";
 
     public static final String FILTER_VIEW_INVETATION = "com.mobilez365.xo.viewInvite";
     public static final String FILTER_PLAY_WITH_FRIEND = "com.mobilez365.xo.playWithFriend";
@@ -42,7 +53,7 @@ public class Constant {
     public static final String INTENT_KEY_OPONENT_STROK = "com.mobilez365.xo.OPONENT_STROK";
     public static final String INTENT_KEY_IS_MY_TURN= "com.mobilez365.xo.IS_MY_TURN";
     public static final String INTENT_KEY_IS_GAME_CONTINUE= "com.mobilez365.xo.INTENT_KEY_IS_GAME_CONTINUE";
-
+    public static final String INTENT_KEY_AI_LEVEL= "com.mobilez365.xo.INTENT_KEY_AI_LEVEL";
 
     //Simbol Identificator
     public static final int MY_SYMBOLE_O = 0;

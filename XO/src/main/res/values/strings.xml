@@ -26,6 +26,11 @@
     <string name="invite_friend_string">Invite Friend</string>
     <string name="chech_invte_string">Check Invite</string>
 
+    <!--Select AI Level-->
+    <string name="easy_level_string">Easy</string>
+    <string name="medium_level_string">Medium</string>
+    <string name="hard_level_string">Hard</string>
+
     <!--Main Menu-->
     <string name="main_menu_one_player">1 PLAYER</string>
     <string name="main_menu_two_player">2 PLAYERS</string>
@@ -51,5 +56,7 @@
     <string name="draw_game_string">Draw Game!</string>
     <string name="continue_string">Continue?</string>
     <string name="waiting_opponent_string">Waiting Opponent</string>
+
+    <string name="player_string">Player</string>
 
 </resources>

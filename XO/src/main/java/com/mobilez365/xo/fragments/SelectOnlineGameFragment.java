@@ -15,7 +15,7 @@ import com.mobilez365.xo.util.Constant;
 /**
  * Created by BruSD on 06.05.2014.
  */
-public class SelectOnlineGameFragment extends Fragment implements View.OnClickListener{
+public class SelectOnlineGameFragment extends Fragment implements View.OnClickListener {
     private Button quickGameButton, inviteFriendButton, checkInviteButton;
     private View rootView;
 
@@ -68,6 +68,5 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
 
     private void startQuickGame() {
         getActivity().sendBroadcast(new Intent(Constant.FILTER_START_QUICK_GAME));
-
     }
 }

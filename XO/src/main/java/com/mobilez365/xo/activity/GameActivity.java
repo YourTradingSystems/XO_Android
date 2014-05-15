@@ -23,8 +23,8 @@ import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.mobilez365.xo.GameServiceUtil.BaseGameActivity;
-import com.mobilez365.xo.ai.FieldValue;
-import com.mobilez365.xo.fragments.OnePlayerFragment;
+import com.mobilez365.xo.fragments.AiFragment;
+import com.mobilez365.xo.fragments.SelectOnePlayerFragment;
 import com.mobilez365.xo.fragments.OnlineGameFragment;
 import com.mobilez365.xo.fragments.SelectOnlineGameFragment;
 import com.mobilez365.xo.fragments.TwoPlayerFragment;
@@ -77,6 +77,10 @@ public class GameActivity extends BaseGameActivity {
         filter.addAction(Constant.FILTER_VIEW_INVETATION);
         filter.addAction(Constant.FILTER_SEND_MY_STROK);
         filter.addAction(Constant.FILTER_IS_GAME_CONTINUE);
+        filter.addAction(Constant.FILTER_VIEW_EASY);
+        filter.addAction(Constant.FILTER_VIEW_MEDIUM);
+        filter.addAction(Constant.FILTER_VIEW_HARD);
+
         registerReceiver(mIntReceiver, filter);
     }
 
@@ -106,7 +110,7 @@ public class GameActivity extends BaseGameActivity {
         Fragment fragment;
         switch (fragmentType) {
             case Constant.SCREEN_TYPE_ONE_PLAYER: {
-                fragment = new OnePlayerFragment();
+                fragment = new SelectOnePlayerFragment();
                 break;
             }
             case Constant.SCREEN_TYPE_TWO_PLAYER: {
@@ -118,8 +122,11 @@ public class GameActivity extends BaseGameActivity {
                 break;
             }
             case Constant.SCREEN_TYPE_ONLINE_GAME: {
-
                 fragment = new OnlineGameFragment();
+                break;
+            }
+            case Constant.SCREEN_AI_GAME: {
+                fragment = new AiFragment();
                 break;
             }
             default: {
@@ -448,6 +455,22 @@ public class GameActivity extends BaseGameActivity {
                     setFragment(Constant.SCREEN_TYPE_ONLINE, null);
                 }
 
+            }
+            else if (intent.getAction().equals(Constant.FILTER_VIEW_EASY)) {
+
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.INTENT_KEY_AI_LEVEL, Constant.AI_EASY);
+                setFragment(Constant.SCREEN_AI_GAME, bundle);
+            }
+            else if (intent.getAction().equals(Constant.FILTER_VIEW_MEDIUM)) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.INTENT_KEY_AI_LEVEL, Constant.AI_MEDIUM);
+                setFragment(Constant.SCREEN_AI_GAME, bundle);
+            }
+            else if (intent.getAction().equals(Constant.FILTER_VIEW_HARD)) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.INTENT_KEY_AI_LEVEL, Constant.AI_HARD);
+                setFragment(Constant.SCREEN_AI_GAME, bundle);
             }
         }
     }

@@ -52,13 +52,13 @@ public class AIPlayer {
         if (countInRowToWin <= gameField.length / 2)
             throw new InvalidParameterException("Too few objects to be collected in a row to win (too easy)");
 
-        if (aiSide != FieldValue.O || aiSide != FieldValue.X)
+        if (aiSide ==FieldValue.Empty)
             throw new InvalidParameterException("AI Player should play for X or O");
 
         switch (level){
             case Easy:      return getEasyMove(gameField);
             case Medium:    return getMediumMove(gameField, countInRowToWin, aiSide);
-            case Hard:      return getHardMove(gameField, countInRowToWin, aiSide);
+            case Hard:      return getMediumMove(gameField, countInRowToWin, aiSide);//return getHardMove(gameField, countInRowToWin, aiSide);
             default:        throw new InvalidParameterException("Unknown level: " + level.toString());
         }
     }
