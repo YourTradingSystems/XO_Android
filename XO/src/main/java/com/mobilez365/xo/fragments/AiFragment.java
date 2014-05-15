@@ -294,7 +294,7 @@ public class AiFragment extends Fragment {
                             Random random = new Random();
                             int randomID = random.nextInt(3) + 1;
 
-                            String zeroName = "zero" + randomID + "_img";
+                            String zeroName = "zero" + 1 + "_img";
 
                             imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(zeroName, "drawable", parentActivity.getPackageName())));
                             fieldValuesArray[position] = FieldValue.O;
@@ -305,7 +305,7 @@ public class AiFragment extends Fragment {
                             Random random = new Random();
                             int randomID = random.nextInt(4) + 1;
 
-                            String crossName = "cross" + randomID + "_img";
+                            String crossName = "cross" + 1 + "_img";
                             imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(crossName, "drawable", parentActivity.getPackageName())));
                             fieldValuesArray[position] = FieldValue.X;
                             myTurnWinChecker(position);
@@ -355,8 +355,8 @@ public class AiFragment extends Fragment {
         }
 
         ((XOImageAdapter)gridview.getAdapter()).notifyDataSetChanged();
-        winChecker();
         infoYourTheyTornTextView.setText(parentActivity.getString(R.string.your_torn_string));
+        winChecker();
         isMyTurn = true;
     }
 
@@ -452,12 +452,10 @@ public class AiFragment extends Fragment {
                     break;
                 }
                 case 2:{
-
                     winLineImageView.setPadding(winLineImageView.getPaddingLeft(), width - width/3, winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
                     winLineImageView.requestLayout();
                     break;
                 }
-
 
             }
         }else {
