@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
+import com.mobilez365.xo.XOApplication;
 import com.mobilez365.xo.util.Constant;
 
 /**
@@ -18,10 +21,16 @@ import com.mobilez365.xo.util.Constant;
 public class SelectOnlineGameFragment extends Fragment implements View.OnClickListener {
     private Button quickGameButton, inviteFriendButton, checkInviteButton;
     private View rootView;
+    private Tracker traker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_choice_online_game_layout, container, false);
+
+        // Get tracker.
+        traker= ((XOApplication)getActivity().getApplication()).getTracker(
+                XOApplication.TrackerName.APP_TRACKER);
+
         initAllView();
         return rootView;
     }
@@ -43,19 +52,31 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
         int id =  v.getId();
         switch (id){
             case R.id.quick_game_button:{
+                sendScreenView(Constant.SCREEN_QUICK_GAME);
                 startQuickGame();
                 break;
             }
             case R.id.invite_friend_button:{
+                sendScreenView(Constant.SCREEN_INVITE_FRIEND);
                 playWithFriend();
                 break;
             }
             case R.id.pending_invite_button:{
+                sendScreenView(Constant.SCREEN_VIEW_INVITE);
                 viewInvite();
                 break;
             }
         }
         SoundManager.playSound(getActivity(), Constant.CLICK_SOUND);
+    }
+
+    private void sendScreenView(String screen){
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        traker.setScreenName(screen);
+
+        // Send a screen view.
+        traker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private void viewInvite() {

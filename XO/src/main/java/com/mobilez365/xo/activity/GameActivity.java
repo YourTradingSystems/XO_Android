@@ -47,11 +47,16 @@ public class GameActivity extends BaseGameActivity {
     private List<Participant> mParticipants;
     public Room mXORoom;
     private String mXORoomID;
+    private Fragment fragment;
     private String mMyPartisipientId;
     private boolean isFierstMessage = true;
 
-    private int myRundom365;
+    private int myRandom365;
     private boolean isMyTurn;
+    //CALBACKS
+    private XORoomUpdateListener xoRoomUpdateListener ;
+    private XORealTimeMessageReceivedListener xoRealTimeMessageReceivedListener;
+    private XORoomStatusUpdateListener xoRoomStatusUpdateListener;
     // request code for the "select players" UI
     // can be any number as long as it's unique
     final static int RC_SELECT_PLAYERS = 10000;
@@ -63,9 +68,15 @@ public class GameActivity extends BaseGameActivity {
         setContentView(R.layout.activity_game);
 
         int fragmentType  = getIntent().getIntExtra("screenType", -1);
-
         setFragment(fragmentType, null);
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (fragment instanceof OnlineGameFragment) {
+            Games.RealTimeMultiplayer.leave(getApiClient(), xoRoomUpdateListener, mXORoomID);
+        }
+        super.onBackPressed();
 
     }
 
@@ -109,7 +120,7 @@ public class GameActivity extends BaseGameActivity {
 
     }
     private Fragment fragmentFromContentType(int fragmentType) {
-        Fragment fragment;
+
         switch (fragmentType) {
             case Constant.SCREEN_TYPE_ONE_PLAYER: {
                 fragment = new SelectOnePlayerFragment();
@@ -139,6 +150,9 @@ public class GameActivity extends BaseGameActivity {
     }
 
     private void startQuickGame() {
+        xoRoomUpdateListener = new XORoomUpdateListener();
+        xoRealTimeMessageReceivedListener = new XORealTimeMessageReceivedListener();
+        xoRoomStatusUpdateListener = new XORoomStatusUpdateListener();
         // auto-match criteria to invite one random automatch opponent.
         // You can also specify more opponents (up to 3).
         Bundle am = RoomConfig.createAutoMatchCriteria(1, 1, 0);
@@ -157,6 +171,9 @@ public class GameActivity extends BaseGameActivity {
         // go to game screen
     }
     private void inviteFriend() {
+        xoRoomUpdateListener = new XORoomUpdateListener();
+        xoRealTimeMessageReceivedListener = new XORealTimeMessageReceivedListener();
+        xoRoomStatusUpdateListener = new XORoomStatusUpdateListener();
         // launch the player selection screen
         // minimum: 1 other player; maximum: 3 other players
         Intent intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mHelper.getApiClient(), 1, 1);
@@ -240,9 +257,9 @@ public class GameActivity extends BaseGameActivity {
 
     // create a RoomConfigBuilder that's appropriate for your implementation
     private RoomConfig.Builder makeBasicRoomConfigBuilder() {
-        return RoomConfig.builder(new XORoomUpdateListener())
-                .setMessageReceivedListener(new XORealTimeMessageReceivedListener())
-                .setRoomStatusUpdateListener(new XORoomStatusUpdateListener());
+        return RoomConfig.builder( xoRoomUpdateListener)
+                .setMessageReceivedListener( xoRealTimeMessageReceivedListener)
+                .setRoomStatusUpdateListener(xoRoomStatusUpdateListener);
     }
 
     class XORoomUpdateListener implements RoomUpdateListener{
@@ -259,8 +276,6 @@ public class GameActivity extends BaseGameActivity {
             // get waiting room intent
             Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(getApiClient(), room, Integer.MAX_VALUE);
             startActivityForResult(i, RC_WAITING_ROOM);
-
-
         }
 
         @Override
@@ -269,7 +284,6 @@ public class GameActivity extends BaseGameActivity {
                 // display error
                 return;
             }
-
             // get waiting room intent
             Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(getApiClient(), room, Integer.MAX_VALUE);
             startActivityForResult(i, RC_WAITING_ROOM);
@@ -286,14 +300,8 @@ public class GameActivity extends BaseGameActivity {
                 // display error
                 return;
             }
-
-
         }
     }
-
-
-
-
 
     class XORoomStatusUpdateListener implements RoomStatusUpdateListener{
         // are we already playing?
@@ -336,7 +344,7 @@ public class GameActivity extends BaseGameActivity {
 //
 //
 
-                sendMessageToAllInRoom(String.valueOf(myRundom365));
+                sendMessageToAllInRoom(String.valueOf(myRandom365));
 
 
             }
@@ -404,7 +412,8 @@ public class GameActivity extends BaseGameActivity {
 
         @Override
         public void onDisconnectedFromRoom(Room room) {
-
+            sendBroadcast(new Intent(Constant.FF_OPPONENT_LEFT_GAME));
+            Games.RealTimeMultiplayer.leave(getApiClient(), xoRoomUpdateListener, mXORoomID);
         }
 
         @Override
@@ -419,11 +428,8 @@ public class GameActivity extends BaseGameActivity {
     }
 
     private void startGameOfTruth() {
-
         Bundle bundle = new Bundle();
-
         bundle.putBoolean(Constant.INTENT_KEY_IS_MY_TURN, isMyTurn);
-
         setFragment(Constant.SCREEN_TYPE_ONLINE_GAME , bundle);
 
 
@@ -437,13 +443,13 @@ public class GameActivity extends BaseGameActivity {
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction().equals(Constant.FILTER_START_QUICK_GAME)) {
-                setMyRundom365();
+                setMyRandom365();
                 startQuickGame();
             }else if(intent.getAction().equals(Constant.FILTER_PLAY_WITH_FRIEND)){
-                setMyRundom365();
+                setMyRandom365();
                 inviteFriend();
             }else if(intent.getAction().equals(Constant.FILTER_VIEW_INVETATION)){
-                viewInitation();
+                viewInvitation();
 
             } else if(intent.getAction().equals(Constant.FILTER_SEND_MY_STROK)){
                 String message = intent.getStringExtra(Constant.INTENT_KEY_MY_STROK);
@@ -456,7 +462,6 @@ public class GameActivity extends BaseGameActivity {
                     sendMessageToAllInRoom(message);
                     setFragment(Constant.SCREEN_TYPE_ONLINE, null);
                 }
-
             }
             else if (intent.getAction().equals(Constant.FILTER_VIEW_EASY)) {
 
@@ -477,19 +482,17 @@ public class GameActivity extends BaseGameActivity {
         }
     }
 
-    private void setMyRundom365(){
+    private void setMyRandom365(){
         Random r = new Random();
-        myRundom365 = r.nextInt(365);
-
+        myRandom365 = r.nextInt(365);
     }
 
-    private void viewInitation(){
-
-
-// launch the intent to show the invitation inbox screen
+    private void viewInvitation(){
+        // launch the intent to show the invitation inbox screen
         Intent intent = Games.Invitations.getInvitationInboxIntent(getApiClient());
         startActivityForResult(intent, RC_INVITATION_INBOX);
     }
+
     class XORealTimeMessageReceivedListener implements RealTimeMessageReceivedListener{
 
         @Override
@@ -519,17 +522,17 @@ public class GameActivity extends BaseGameActivity {
         }
     }
 
-    private void checkHowFirst(String oponentMess) {
-        int oponentRundom365 =  Integer.valueOf(oponentMess);
-        if (oponentRundom365 > myRundom365){
+    private void checkHowFirst(String opponentMess) {
+        int opponentRandom365 =  Integer.valueOf(opponentMess);
+        if (opponentRandom365 > myRandom365){
             isMyTurn = false;
             isFierstMessage = false;
-        }else if(oponentRundom365 < myRundom365){
+        }else if(opponentRandom365 < myRandom365){
             isMyTurn = true;
             isFierstMessage = false;
-        }else if(oponentRundom365 == myRundom365){
-            setMyRundom365();
-            sendMessageToAllInRoom(String.valueOf(myRundom365));
+        }else if(opponentRandom365 == myRandom365){
+            setMyRandom365();
+            sendMessageToAllInRoom(String.valueOf(myRandom365));
         }
     }
 

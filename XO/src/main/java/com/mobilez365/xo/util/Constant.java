@@ -4,6 +4,24 @@ package com.mobilez365.xo.util;
  * Created by BruSD on 06.05.2014.
  */
 public class Constant {
+    //Therd party utils keys
+    public final static String START_AD_MOVBI_PUBLISHER_ID = "5375ec5b5bfbc40f00000000";
+    public final static String GA_ACCOUNT_ID ="UA-51080238-1";
+
+    //Screens for Analytics
+    public final static String SCREEN_MAIN ="Main Screen";
+    public final static String SCREEN_SINGLE_PLAYER ="Single Player";
+    public final static String SCREEN_TWO_PLAYER ="Two Players";
+    public final static String SCREEN_ONLINE_GAME_CHOICE ="Choice Online Game";
+    public final static String SCREEN_QUICK_GAME ="Quick Game";
+    public final static String SCREEN_INVITE_FRIEND ="Invite Friend";
+    public final static String SCREEN_VIEW_INVITE ="View Invite";
+    public final static String SCREEN_LEADER_BOARD ="Leader Board";
+    public final static String SCREEN_ACHIEVEMENTS="Achievements";
+    public final static String SCREEN_SETTINGS="Settings Screen";
+    public final static String SCREEN_ABOUT="About Screen";
+    public final static String SCREEN_GAME="Game Online Screen";
+
 
     // AILevel
     public static final int AI_EASY = 0;
@@ -47,6 +65,7 @@ public class Constant {
 
     public static final String FF_OPONENT_STROK = "com.mobilez365.xo.OPONENT_STROK";
     public static final String FF_IS_GAME_CONTINUE_OPPONENT_OPINION= "com.mobilez365.xo.FF_IS_GAME_CONTINUE_OPPONENT_OPINION";
+    public static final String FF_OPPONENT_LEFT_GAME= "com.mobilez365.xo.opponent_left_game";
 
     //Intent Keys
     public static final String INTENT_KEY_MY_STROK = "com.mobilez365.xo.MyStrok";
@@ -58,4 +77,6 @@ public class Constant {
     //Simbol Identificator
     public static final int MY_SYMBOLE_O = 0;
     public static final int MY_SYMBOLE_X = 1;
+
+
 }

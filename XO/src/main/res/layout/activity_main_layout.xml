@@ -117,14 +117,18 @@
                 android:text="@string/main_menu_settings"/>
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/main_activity_adsPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            >
+
+        </LinearLayout>
     </FrameLayout>
 
-    <RelativeLayout
-        android:id="@+id/main_activity_adsPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">        
-    </RelativeLayout>
+
 
 
 </RelativeLayout>

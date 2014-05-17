@@ -28,11 +28,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.mobilez365.xo.GameServiceUtil.AppStateManagerUtil;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
+import com.mobilez365.xo.XOApplication;
 import com.mobilez365.xo.activity.GameActivity;
 import com.mobilez365.xo.ai.FieldValue;
 import com.mobilez365.xo.ai.GameChecker;
@@ -70,18 +73,22 @@ public class OnlineGameFragment extends Fragment {
     private static final int timeToContinueGame = 10;
     private int timerCountToStrock;
     private int timerCountToContinueGame;
-
+    private boolean isGameFinish;
     private TextView myUserNameTextView, oponentUserNameTextView, mySignTextView, oponentSignTextView, timerTextView;
     private TextView myScoreFirstCounterTextView, myScoreSecondCounterTextView, opponentScoreFirstCounterTextView, opponentScoreSecondCounterTextView;
     private ImageView  myAvatarImageView, oponentAvatarImageView, winLineImageView;
     private Button noContinueButton, yesContinueButton;
     private TextView infoYourTheyTornTextView, continueTextView;
     private int myWinsThisGame, oponentWinsThisGame;
+    private Tracker traker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
         parentActivity = getActivity();
+
+        traker= ((XOApplication)parentActivity.getApplication()).getTracker(
+                XOApplication.TrackerName.APP_TRACKER);
 
         AppStateManagerUtil.init(((GameActivity)parentActivity).getGameHelper().getApiClient(), parentActivity);
 
@@ -111,9 +118,38 @@ public class OnlineGameFragment extends Fragment {
 
         return rootView;
     }
+    private void sendScreenView(String screen){
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        traker.setScreenName(screen);
 
+        // Send a screen view.
+        traker.send(new HitBuilders.AppViewBuilder().build());
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constant.FF_OPONENT_STROK);
+        filter.addAction(Constant.FF_IS_GAME_CONTINUE_OPPONENT_OPINION);
+        filter.addAction(Constant.FF_OPPONENT_LEFT_GAME);
+
+        parentActivity.registerReceiver(mIntReceiver, filter);
+
+    }
+
+
+    @Override
+    public void onPause() {
+        if (mIntReceiver != null)
+            parentActivity.unregisterReceiver(mIntReceiver);
+        super.onPause();
+    }
 
     private void initialAllView() {
+        isGameFinish = false;
+
         gridview = (GridView)rootView.findViewById(R.id.game_xo_grid_view);
 
         mySignTextView = (TextView)rootView.findViewById(R.id.user_signe_text_view_game_fragment);
@@ -145,13 +181,19 @@ public class OnlineGameFragment extends Fragment {
         if (myWinsThisGame < 10){
             myScoreFirstCounterTextView.setText(String.valueOf(myWinsThisGame));
         }else {
-
+            String second   = String.valueOf(myWinsThisGame).substring(0 ,1);
+            String ferst = String.valueOf(myWinsThisGame).substring(1);
+            myScoreFirstCounterTextView.setText(ferst);
+            myScoreSecondCounterTextView.setText(second);
         }
 
         if (oponentWinsThisGame < 10){
             opponentScoreFirstCounterTextView.setText(String.valueOf(oponentWinsThisGame));
         }else {
-
+            String second   = String.valueOf(oponentWinsThisGame).substring(0 ,1);
+            String ferst = String.valueOf(oponentWinsThisGame).substring(1);
+            opponentScoreFirstCounterTextView.setText(ferst);
+            opponentScoreSecondCounterTextView.setText(second);
         }
     }
 
@@ -185,43 +227,7 @@ public class OnlineGameFragment extends Fragment {
 
     }
 
-    private void TimerGameMethod()
-    {
-        //This method is called directly by the timer
-        //and runs in the same thread as the timer.
 
-        //We call the method that will work with the UI
-        //through the runOnUiThread method.
-        parentActivity.runOnUiThread(Timer_Tick);
-    }
-    private Runnable Timer_Tick = new Runnable() {
-        public void run() {
-
-            if (timerCountToStrock != 0){
-                if (timerCountToStrock <10){
-                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.holo_red_dark));
-                }else{
-                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.black));
-                }
-                    timerTextView.setText(String.valueOf(timerCountToStrock));
-            }else {
-                timerTextView.setText(String.valueOf(timerCountToStrock));
-                gameTimer.cancel();
-                endGameByTimer();
-
-            }
-            timerCountToStrock = timerCountToStrock - 1;
-        }
-    };
-
-    private void endGameByTimer() {
-        if (isMyTurn){
-            showLoseMessage();
-        }else {
-            showWinMessage();
-        }
-
-    }
 
     private void fillPlayersData()  {
         Room room = ((GameActivity) parentActivity).mXORoom;
@@ -283,24 +289,7 @@ public class OnlineGameFragment extends Fragment {
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Constant.FF_OPONENT_STROK);
-        filter.addAction(Constant.FF_IS_GAME_CONTINUE_OPPONENT_OPINION);
-        parentActivity.registerReceiver(mIntReceiver, filter);
-
-    }
-
-
-    @Override
-    public void onPause() {
-        if (mIntReceiver != null)
-            parentActivity.unregisterReceiver(mIntReceiver);
-        super.onPause();
-    }
 
 
 
@@ -362,6 +351,8 @@ public class OnlineGameFragment extends Fragment {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (isGameFinish)
+                        return;
                     if(isMyTurn && fieldValuesArray[position] == FieldValue.Empty ) {
                         infoYourTheyTornTextView.setText(parentActivity.getString(R.string.they_torn_string));
                         if (mySymbole == Constant.MY_SYMBOLE_O) {
@@ -560,6 +551,17 @@ public class OnlineGameFragment extends Fragment {
                 String oponentStrok = intent.getStringExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE);
                 isGameContinueByOpponent = oponentStrok;
                 checkOpponentOpinion();
+            }else if(intent.getAction().equals(Constant.FF_OPPONENT_LEFT_GAME)){
+                myWinsThisGame++;
+
+                AppStateManagerUtil.updateOlineProgressAppState();
+                SoundManager.playSound(parentActivity, Constant.WIN_SOUND);
+                infoYourTheyTornTextView.setText(parentActivity.getString(R.string.win_string));
+
+                continueNotificationShow();
+                continueTextView.setText(parentActivity.getString(R.string.opponent_left_game_string));
+                noContinueButton.setText(parentActivity.getString(R.string.back_string));
+                yesContinueButton.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -585,6 +587,7 @@ public class OnlineGameFragment extends Fragment {
     }
 
     private void showEndGameDialog (int winerStatus ){
+        isGameFinish = true;
         timerCountToContinueGame = timeToContinueGame;
         waitinTimer = new Timer();
         waitinTimer.schedule(new TimerTask() {
@@ -611,34 +614,7 @@ public class OnlineGameFragment extends Fragment {
         fillScoreView();
     }
 
-    private void TimerWaitingMethod()
-    {
-        //This method is called directly by the timer
-        //and runs in the same thread as the timer.
 
-        //We call the method that will work with the UI
-        //through the runOnUiThread method.
-        parentActivity.runOnUiThread(Timer_Tick_Waiting);
-    }
-    private Runnable Timer_Tick_Waiting = new Runnable() {
-        public void run() {
-
-            if (timerCountToContinueGame != 0){
-                if (timerCountToContinueGame <10){
-                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.holo_red_dark));
-                }else{
-                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.black));
-                }
-                timerTextView.setText(String.valueOf(timerCountToContinueGame));
-            }else {
-                timerTextView.setText(String.valueOf(timerCountToContinueGame));
-                waitinTimer.cancel();
-                cancelGame();
-
-            }
-            timerCountToContinueGame = timerCountToContinueGame - 1;
-        }
-    };
 
     private void showWinMessage(){
         myWinsThisGame++;
@@ -710,12 +686,15 @@ public class OnlineGameFragment extends Fragment {
         @Override
         public void onClick(View v) {
             cancelGame();
-            waitinTimer.cancel();
+            if (waitinTimer != null){
+                waitinTimer.cancel();
+            }
             SoundManager.playSound(parentActivity, Constant.CLICK_SOUND);
         }
     }
 
     private void initialGameField(){
+        sendScreenView(Constant.SCREEN_GAME);
         gridview.setAdapter(new XOImageAdapter(parentActivity, mySign, fieldValuesArray ));
     }
 
@@ -750,9 +729,75 @@ public class OnlineGameFragment extends Fragment {
             mySign = Constant.MY_SYMBOLE_X;
             isMyTurn = true;
         }
-
         winLineImageView.setImageDrawable(getResources().getDrawable(R.drawable.zero_field));
         winLineImageView.setPadding(0,0,0,0);
         winLineImageView.requestLayout();
     }
+
+    //region Timers
+    private void TimerGameMethod()
+    {
+        //This method is called directly by the timer
+        //and runs in the same thread as the timer.
+
+        //We call the method that will work with the UI
+        //through the runOnUiThread method.
+        parentActivity.runOnUiThread(Timer_Tick);
+    }
+    private Runnable Timer_Tick = new Runnable() {
+        public void run() {
+
+            if (timerCountToStrock != 0){
+                if (timerCountToStrock <10){
+                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.holo_red_dark));
+                }else{
+                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.black));
+                }
+                timerTextView.setText(String.valueOf(timerCountToStrock));
+            }else {
+                timerTextView.setText(String.valueOf(timerCountToStrock));
+                gameTimer.cancel();
+                endGameByTimer();
+
+            }
+            timerCountToStrock = timerCountToStrock - 1;
+        }
+    };
+
+    private void endGameByTimer() {
+        if (isMyTurn){
+            showLoseMessage();
+        }else {
+            showWinMessage();
+        }
+
+    }
+
+    private void TimerWaitingMethod()
+    {
+        //This method is called directly by the timer
+        //and runs in the same thread as the timer.
+
+        //We call the method that will work with the UI
+        //through the runOnUiThread method.
+        parentActivity.runOnUiThread(Timer_Tick_Waiting);
+    }
+    private Runnable Timer_Tick_Waiting = new Runnable() {
+        public void run() {
+            if (timerCountToContinueGame != 0){
+                if (timerCountToContinueGame <10){
+                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.holo_red_dark));
+                }else{
+                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.black));
+                }
+                timerTextView.setText(String.valueOf(timerCountToContinueGame));
+            }else {
+                timerTextView.setText(String.valueOf(timerCountToContinueGame));
+                waitinTimer.cancel();
+                cancelGame();
+            }
+            timerCountToContinueGame = timerCountToContinueGame - 1;
+        }
+    };
+    // endregion
 }

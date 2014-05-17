@@ -50,7 +50,7 @@ public class AiFragment extends Fragment {
     private boolean isMyTurn;
     private boolean isGameFinish;
     private int mySign;
-    private Timer gameTimer, waitinTimer;
+    private Timer waitinTimer;
 
     private FieldValue [][] fieldValuesMatrix;
     private FieldValue [] fieldValuesArray;
@@ -92,6 +92,14 @@ public class AiFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onStop() {
+        if (waitinTimer != null) {
+            waitinTimer.cancel();
+        }
+        super.onStop();
+    }
+
     private void initAllView() {
 
         gridview = (GridView)rootView.findViewById(R.id.game_xo_grid_view);
@@ -129,14 +137,13 @@ public class AiFragment extends Fragment {
     }
 
     private void fillDataInView() {
-        timerCountToStroke = timeToStrock;
-        gameTimer = new Timer();
 
-        if (mySign == Constant.MY_SYMBOLE_X){
+
+        if (mySign == Constant.MY_SYMBOLE_X) {
             mySignTextView.setText("X");
             infoYourTheyTornTextView.setText(parentActivity.getString(R.string.your_torn_string));
             opponentSignTextView.setText("O");
-        }else {
+        } else {
             mySignTextView.setText("O");
             infoYourTheyTornTextView.setText(parentActivity.getString(R.string.they_torn_string));
             opponentSignTextView.setText("X");
@@ -146,50 +153,9 @@ public class AiFragment extends Fragment {
         noContinueButton.setVisibility(View.INVISIBLE);
         yesContinueButton.setVisibility(View.INVISIBLE);
         continueTextView.setVisibility(View.INVISIBLE);
-
-        gameTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                TimerGameMethod();
-            }
-        }, 0, 1000);
-
     }
 
-    private void TimerGameMethod() {
-        parentActivity.runOnUiThread(Timer_Tick);
-    }
 
-    private Runnable Timer_Tick = new Runnable() {
-        public void run() {
-
-            if (timerCountToStroke != 0) {
-                if (timerCountToStroke < 10) {
-                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.holo_red_dark));
-                }
-                else {
-                    timerTextView.setTextColor(parentActivity.getResources().getColor(android.R.color.black));
-                }
-                timerTextView.setText(String.valueOf(timerCountToStroke));
-            }
-            else {
-                timerTextView.setText(String.valueOf(timerCountToStroke));
-                gameTimer.cancel();
-                endGameByTimer();
-
-            }
-            timerCountToStroke = timerCountToStroke - 1;
-        }
-    };
-
-    private void endGameByTimer() {
-        if (isMyTurn) {
-            showLoseMessage();
-        }
-        else {
-            showWinMessage();
-        }
-    }
 
     private void showLoseMessage() {
         SoundManager.playSound(parentActivity, Constant.LOSE_SOUND);
@@ -374,7 +340,7 @@ public class AiFragment extends Fragment {
             }else if (winerSymbole.equals("O")){
                 showEndGameDialog(Constant.MY_SYMBOLE_O);
             }
-            gameTimer.cancel();
+
         }
         else {
             boolean isNoWay = true;
@@ -385,7 +351,7 @@ public class AiFragment extends Fragment {
                 }
             }
             if (isNoWay){
-                gameTimer.cancel();
+
                 showEndGameDialog(-1);
             }
         }

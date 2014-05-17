@@ -24,7 +24,7 @@ public final class AppStateManagerUtil  {
     private static Activity activity;
 
     //Cloud Slots
-    private static final int USER_ONLINE_WINS_PROGRES = 1;
+    public static final int USER_ONLINE_WINS_PROGRES = 1;
     private static final int USER_ESY_II_WINS_PROGRES = 2;
     private static final int USER_HARD_II_WINS_PROGRES = 3;
     private static final int USER_TOW_PLAYERS_GAME_PROGRES = 4;

@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 public class AppSettings {
 
     private static SharedPreferences mPreferences;
+
     private static SharedPreferences getSharedPreferences(Context context){
         if (mPreferences == null) {
             synchronized (AppSettings.class) {

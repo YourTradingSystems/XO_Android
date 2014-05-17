@@ -49,12 +49,14 @@
     <!--Game Screen Strings-->
     <string name="no_string">No</string>
     <string name="yes_string">Yes</string>
+    <string name="back_string">Back</string>
     <string name="your_torn_string">Your Turn!</string>
     <string name="they_torn_string">Their Turn!</string>
     <string name="win_string">You Win!</string>
     <string name="lose_string">You Lose!</string>
     <string name="draw_game_string">Draw Game!</string>
     <string name="continue_string">Continue?</string>
+    <string name="opponent_left_game_string">Opponent Left Game!</string>
     <string name="waiting_opponent_string">Waiting Opponent</string>
 
     <string name="player_string">Player</string>
