@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.games.Games;
@@ -37,6 +39,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     protected SADView sadView;
     private  Tracker traker;
+
+    private InterstitialAd interstitial;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +63,17 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
          //or this.sadView.loadAd(SADView.LANGUAGE_RU);
         SoundManager.initSound(this, Constant.CLICK_SOUND);
         initAllView();
-    }
 
+        interstitial = new InterstitialAd(this);
+        interstitial.setAdUnitId(Constant.MY_AD_UNIT_ID);
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Запуск загрузки межстраничного объявления.
+        interstitial.loadAd(adRequest);
+
+
+
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -103,6 +117,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
     @Override
     public void onClick(View v) {
+
         int id = v.getId();
         switch (id){
             case R.id.main_activity_one_player:{
@@ -148,7 +163,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             case R.id.main_activity_achievements:{
                 if(isSignedIn()){
                     sendScreenView(Constant.SCREEN_ACHIEVEMENTS);
-
+                    startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), 1);
                 }
                 break;
             }

@@ -1,6 +1,15 @@
 <resources>
     //IDs for game service
-    <string name="leader_board_id">CgkI7qvx050DEAIQBg</string>
+    <string name="achievement_newbie">CgkI-PGy2McTEAIQAg</string>
+    <string name="achievement_good_player">CgkI-PGy2McTEAIQAw</string>
+    <string name="achievement_beginer">CgkI-PGy2McTEAIQBA</string>
+    <string name="achievement_gamer">CgkI-PGy2McTEAIQBQ</string>
+    <string name="achievement_friendly_gamer">CgkI-PGy2McTEAIQBg</string>
+    <string name="leader_board_id">CgkI-PGy2McTEAIQBw</string>
+
+
+
+
 
     <string name="app_name">XO</string>
     <string name="settings_label">Settings</string>
@@ -45,6 +54,7 @@
     <string name="settings_music">Music</string>
     <string name="settings_push">Push</string>
     <string name="settings_analytics">Google Analytics</string>
+    <string name="settings_you_login_as_string">You login as:</string>
 
     <!--Game Screen Strings-->
     <string name="no_string">No</string>
@@ -60,5 +70,10 @@
     <string name="waiting_opponent_string">Waiting Opponent</string>
 
     <string name="player_string">Player</string>
+
+    <!--Two Player Screen-->
+    <string name="user_one_string">Player 1</string>
+    <string name="user_two_string">Player 2</string>
+    <string name="win_user_string">Win</string>
 
 </resources>

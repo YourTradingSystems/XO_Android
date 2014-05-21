@@ -98,7 +98,7 @@ public abstract class BaseGameActivity extends LifecycleBaseActivity implements
         return mHelper.getApiClient();
     }
 
-    protected boolean isSignedIn() {
+    public boolean isSignedIn() {
         return mHelper.isSignedIn();
     }
 

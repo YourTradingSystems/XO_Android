@@ -7,15 +7,16 @@ public class Constant {
     //Therd party utils keys
     public final static String START_AD_MOVBI_PUBLISHER_ID = "5375ec5b5bfbc40f00000000";
     public final static String GA_ACCOUNT_ID ="UA-51080238-1";
+    public final static String MY_AD_UNIT_ID = "ca-app-pub-8370463222730338/7012385604";
 
     //Screens for Analytics
     public final static String SCREEN_MAIN ="Main Screen";
     public final static String SCREEN_SINGLE_PLAYER ="Single Player";
     public final static String SCREEN_TWO_PLAYER ="Two Players";
-    public final static String SCREEN_ONLINE_GAME_CHOICE ="Choice Online Game";
+    public final static String SCREEN_ONLINE_GAME_CHOICE ="Choose Online Game";
     public final static String SCREEN_QUICK_GAME ="Quick Game";
     public final static String SCREEN_INVITE_FRIEND ="Invite Friend";
-    public final static String SCREEN_VIEW_INVITE ="View Invite";
+    public final static String SCREEN_VIEW_INVITE ="Show Invites";
     public final static String SCREEN_LEADER_BOARD ="Leader Board";
     public final static String SCREEN_ACHIEVEMENTS="Achievements";
     public final static String SCREEN_SETTINGS="Settings Screen";

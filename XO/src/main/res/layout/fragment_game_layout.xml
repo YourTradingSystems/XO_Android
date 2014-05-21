@@ -6,37 +6,34 @@
     android:background="@drawable/bg"
     >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
-        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         >
         <ImageView
             android:id="@+id/my_avatar_image_view_game_fragment"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-
+            android:layout_alignParentLeft="true"
             />
         <TextView
             android:id="@+id/timer_text_view_game_fragment"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:background="@drawable/timer_bg"
-            android:gravity="center"
+            android:layout_centerInParent="true"
             android:textSize="21sp"
             />
         <ImageView
             android:id="@+id/oponent_avatar_image_view_game_fragment"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_alignParentRight="true"
+
             />
-        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,7 +86,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="0"
+
                     android:gravity="center"
                     android:textSize="30sp"/>
                 <TextView
@@ -105,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="0"
+
                     android:gravity="center"
                     android:textSize="30sp"/>
                 <TextView
@@ -131,7 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="21dp"
+            android:textSize="15dp"
             android:singleLine="true"
             />
             <TextView

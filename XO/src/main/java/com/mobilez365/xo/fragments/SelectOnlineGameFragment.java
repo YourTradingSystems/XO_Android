@@ -1,5 +1,6 @@
 package com.mobilez365.xo.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.XOApplication;
+import com.mobilez365.xo.activity.GameActivity;
 import com.mobilez365.xo.util.Constant;
 
 /**
@@ -22,6 +24,7 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
     private Button quickGameButton, inviteFriendButton, checkInviteButton;
     private View rootView;
     private Tracker traker;
+    private Activity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
                 XOApplication.TrackerName.APP_TRACKER);
 
         initAllView();
+        parentActivity = getActivity();
         return rootView;
     }
 
@@ -50,23 +54,28 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         int id =  v.getId();
-        switch (id){
-            case R.id.quick_game_button:{
-                sendScreenView(Constant.SCREEN_QUICK_GAME);
-                startQuickGame();
-                break;
+        if (((GameActivity)parentActivity).isSignedIn()) {
+            switch (id) {
+                case R.id.quick_game_button: {
+                    sendScreenView(Constant.SCREEN_QUICK_GAME);
+                    startQuickGame();
+                    break;
+                }
+                case R.id.invite_friend_button: {
+                    sendScreenView(Constant.SCREEN_INVITE_FRIEND);
+                    playWithFriend();
+                    break;
+                }
+                case R.id.pending_invite_button: {
+                    sendScreenView(Constant.SCREEN_VIEW_INVITE);
+                    viewInvite();
+                    break;
+                }
             }
-            case R.id.invite_friend_button:{
-                sendScreenView(Constant.SCREEN_INVITE_FRIEND);
-                playWithFriend();
-                break;
-            }
-            case R.id.pending_invite_button:{
-                sendScreenView(Constant.SCREEN_VIEW_INVITE);
-                viewInvite();
-                break;
-            }
+        }else {
+
         }
+
         SoundManager.playSound(getActivity(), Constant.CLICK_SOUND);
     }
 
