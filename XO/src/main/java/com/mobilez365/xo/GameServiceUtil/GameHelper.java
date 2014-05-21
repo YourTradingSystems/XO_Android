@@ -135,7 +135,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
     boolean mShowErrorDialogs = true;
 
     // Print debug logs?
-    boolean mDebugLog = false;
+    boolean mDebugLog = true;
 
     Handler mHandler;
 
