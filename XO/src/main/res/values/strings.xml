@@ -1,11 +1,11 @@
 <resources>
     //IDs for game service
-    <string name="achievement_newbie">CgkI-PGy2McTEAIQAg</string>
-    <string name="achievement_good_player">CgkI-PGy2McTEAIQAw</string>
-    <string name="achievement_beginer">CgkI-PGy2McTEAIQBA</string>
-    <string name="achievement_gamer">CgkI-PGy2McTEAIQBQ</string>
-    <string name="achievement_friendly_gamer">CgkI-PGy2McTEAIQBg</string>
-    <string name="leader_board_id">CgkI-PGy2McTEAIQBw</string>
+    <string name="achievement_newbie">CgkI7qvx050DEAIQAg</string>
+    <string name="achievement_good_player">CgkI7qvx050DEAIQBA</string>
+    <string name="achievement_beginer">CgkI7qvx050DEAIQBw</string>
+    <string name="achievement_gamer">CgkI7qvx050DEAIQCA</string>
+    <string name="achievement_friendly_gamer">CgkI7qvx050DEAIQCQ</string>
+    <string name="leader_board_id">CgkI7qvx050DEAIQBg</string>
 
 
 

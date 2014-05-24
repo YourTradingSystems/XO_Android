@@ -1,18 +1,15 @@
 package com.mobilez365.xo.GameServiceUtil;
 
 import android.app.Activity;
-import android.net.wifi.WifiConfiguration;
 import android.util.Log;
 
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.games.Games;
 import com.mobilez365.xo.R;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.nio.charset.Charset;
 
 /**

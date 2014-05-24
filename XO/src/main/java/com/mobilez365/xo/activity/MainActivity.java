@@ -44,8 +44,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        enableDebugLog(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
+
         // Create the adView
         this.sadView = new SADView(this, Constant.START_AD_MOVBI_PUBLISHER_ID);
 

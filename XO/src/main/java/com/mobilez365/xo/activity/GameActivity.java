@@ -88,6 +88,8 @@ public class GameActivity extends BaseGameActivity {
             super.onBackPressed();
         }else if(fragment instanceof SelectOnePlayerFragment) {
             super.onBackPressed();
+        }else if(fragment instanceof SelectOnlineGameFragment) {
+            super.onBackPressed();
         }
 
     }

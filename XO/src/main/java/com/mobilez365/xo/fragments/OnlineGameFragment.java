@@ -1,7 +1,6 @@
 package com.mobilez365.xo.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,7 +18,6 @@ import android.view.View;
 
 
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 
 import android.widget.Button;
@@ -224,7 +222,6 @@ public class OnlineGameFragment extends Fragment {
                 TimerGameMethod();
             }
         }, 0, 1000);
-
     }
 
 
@@ -334,8 +331,6 @@ public class OnlineGameFragment extends Fragment {
                     break;
                 }
                 case X:{
-
-
                     String crossName = "cross" + 1 + "_img" ;
                     imageView.setImageDrawable(parentActivity.getResources().getDrawable(parentActivity.getResources().getIdentifier(crossName, "drawable", parentActivity.getPackageName())));
                     break;
@@ -421,14 +416,9 @@ public class OnlineGameFragment extends Fragment {
         }else {
             fieldValuesArray[arrayIndex] = FieldValue.O;
         }
-
         ((XOImageAdapter)gridview.getAdapter()).notifyDataSetChanged();
         isMyTurn = true;
-
         winChecker();
-
-        Log.v("XO", oponentStrok);
-
 
     }
 
@@ -468,7 +458,6 @@ public class OnlineGameFragment extends Fragment {
         int startY = bundle.getInt(GameChecker.COORDINATE_START_Y);
         int endY = bundle.getInt(GameChecker.COORDINATE_END_Y);
 
-
         if (startY == endY){
             winLineImageView.setImageDrawable(getResources().getDrawable(R.drawable.line_vertical));
             DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -477,7 +466,6 @@ public class OnlineGameFragment extends Fragment {
             int width = displaymetrics.widthPixels;
             switch (startY){
                 case 0:{
-
                     winLineImageView.setPadding(0, winLineImageView.getPaddingTop(), winLineImageView.getPaddingRight(), winLineImageView.getPaddingBottom());
                     winLineImageView.requestLayout();
                     break;

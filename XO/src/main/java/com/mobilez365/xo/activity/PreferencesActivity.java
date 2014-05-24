@@ -7,7 +7,6 @@ import android.widget.CheckedTextView;
 
 import com.google.android.gms.plus.Plus;
 import com.mobilez365.xo.GameServiceUtil.BaseGameActivity;
-import com.mobilez365.xo.LifecycleBaseActivity;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.util.AppSettings;
@@ -49,15 +48,18 @@ public class PreferencesActivity extends BaseGameActivity implements View.OnClic
         cbPush.setOnClickListener(this);
         cbAnalytics.setOnClickListener(this);
         buttonLoginLogout.setOnClickListener(this);
-        if (isSignedIn()){
-            buttonLoginLogout.setText(getString(R.string.settings_you_login_as_string)+Plus.PeopleApi.getCurrentPerson(mHelper.getApiClient()).getDisplayName());
-        }else {
-            buttonLoginLogout.setText(R.string.common_signin_button_text_long);
-        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override
     public void onClick(View v) {
+        SoundManager.playSound(this, Constant.CLICK_SOUND);
         if (v.getId() == R.id.activity_preferences_signin_signout){
             if (isSignedIn()){
                 signOut();
@@ -87,16 +89,17 @@ public class PreferencesActivity extends BaseGameActivity implements View.OnClic
                 break;
 
         }
-        SoundManager.playSound(this, Constant.CLICK_SOUND);
+
     }
 
     @Override
     public void onSignInFailed() {
+        buttonLoginLogout.setText(R.string.common_signin_button_text_long);
 
     }
 
     @Override
     public void onSignInSucceeded() {
-
+        buttonLoginLogout.setText(getString(R.string.settings_you_login_as_string)+Plus.PeopleApi.getCurrentPerson(mHelper.getApiClient()).getDisplayName());
     }
 }

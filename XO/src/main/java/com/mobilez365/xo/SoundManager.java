@@ -1,13 +1,11 @@
 package com.mobilez365.xo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.mobilez365.xo.util.AppSettings;

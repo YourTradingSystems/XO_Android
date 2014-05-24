@@ -1,15 +1,10 @@
 package com.mobilez365.xo.fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.games.multiplayer.Participant;
-import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.mobilez365.xo.GameServiceUtil.AppStateManagerUtil;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
@@ -30,14 +23,8 @@ import com.mobilez365.xo.activity.GameActivity;
 import com.mobilez365.xo.ai.FieldValue;
 import com.mobilez365.xo.ai.GameChecker;
 import com.mobilez365.xo.util.Constant;
-import com.mobilez365.xo.util.GlobalHelper;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by BruSD on 06.05.2014.

@@ -42,10 +42,11 @@ public class AiFragment extends Fragment {
     private GridView gridview;
     private TextView myUserNameTextView, opponentUserNameTextView, mySignTextView, opponentSignTextView, timerTextView;
     private ImageView  myAvatarImageView, oponentAvatarImageView, winLineImageView;
+    private TextView myScoreFirstCounterTextView, myScoreSecondCounterTextView, opponentScoreFirstCounterTextView, opponentScoreSecondCounterTextView;
     private Button noContinueButton, yesContinueButton;
     private TextView infoYourTheyTornTextView, continueTextView;
 
-    private int timerCountToStroke, timerCountToContinueGame;
+    private int  timerCountToContinueGame;
     private AILevel mAILevel;
     private boolean isMyTurn;
     private boolean isGameFinish;
@@ -54,18 +55,16 @@ public class AiFragment extends Fragment {
 
     private FieldValue [][] fieldValuesMatrix;
     private FieldValue [] fieldValuesArray;
+    private int userWins, aiWins;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
 
         parentActivity = getActivity();
-        timerCountToStroke = timeToStrock;
 
-        SoundManager.initSound(parentActivity, Constant.LOSE_SOUND);
-        SoundManager.initSound(parentActivity, Constant.WIN_SOUND);
-        SoundManager.initSound(parentActivity, Constant.GOES_X__SOUND);
-        SoundManager.initSound(parentActivity, Constant.GOES_O_SOUND);
+        initGame();
+
 
         initAllView();
 
@@ -90,6 +89,14 @@ public class AiFragment extends Fragment {
         initialGameField();
 
         return rootView;
+    }
+    private void initGame() {
+        userWins = 0;
+        aiWins = 0;
+        SoundManager.initSound(parentActivity, Constant.LOSE_SOUND);
+        SoundManager.initSound(parentActivity, Constant.WIN_SOUND);
+        SoundManager.initSound(parentActivity, Constant.GOES_X__SOUND);
+        SoundManager.initSound(parentActivity, Constant.GOES_O_SOUND);
     }
 
     @Override
@@ -117,11 +124,16 @@ public class AiFragment extends Fragment {
         timerTextView = (TextView)rootView.findViewById(R.id.timer_text_view_game_fragment);
 
         // notification panel
-
         noContinueButton = (Button)rootView.findViewById(R.id.no_continue_button);
         yesContinueButton = (Button)rootView.findViewById(R.id.yes_continue_button);
         infoYourTheyTornTextView = (TextView) rootView.findViewById(R.id.info_your_they_torn_text_view);
         continueTextView = (TextView) rootView.findViewById(R.id.continue_text_view);
+
+        //score counter
+        myScoreFirstCounterTextView = (TextView)rootView.findViewById(R.id.first_count_my_score_text_view);
+        myScoreSecondCounterTextView =  (TextView)rootView.findViewById(R.id.second_count_my_score_text_view);
+        opponentScoreFirstCounterTextView = (TextView)rootView.findViewById(R.id.first_count_opponent_score_text_view);
+        opponentScoreSecondCounterTextView = (TextView)rootView.findViewById(R.id.second_count_opponent_score_text_view);
     }
 
     private void initFieldValues() {
@@ -327,7 +339,7 @@ public class AiFragment extends Fragment {
     }
 
     private void winChecker() {
-        timerCountToStroke = timeToStrock;
+
         fieldArrayToMarix();
         Bundle bundle = GameChecker.chechForWinCombination(fieldValuesMatrix, 3);
         if (bundle != null){
@@ -452,14 +464,16 @@ public class AiFragment extends Fragment {
             }
             default:{
                 if (mySign == winerStatus){
+                    userWins ++;
                     showWinMessage();
                 }else {
+                    aiWins++;
                     showLoseMessage();
                 }
                 break;
             }
-
         }
+        fillScoreView();
     }
 
     private void TimerWaitingMethod() {
@@ -496,5 +510,23 @@ public class AiFragment extends Fragment {
             timerCountToContinueGame = timerCountToContinueGame - 1;
         }
     };
+    private void fillScoreView(){
+        if (userWins < 10){
+            myScoreFirstCounterTextView.setText(String.valueOf(userWins));
+        }else {
+            String second   = String.valueOf(userWins).substring(0 ,1);
+            String ferst = String.valueOf(userWins).substring(1);
+            myScoreFirstCounterTextView.setText(ferst);
+            myScoreSecondCounterTextView.setText(second);
+        }
 
+        if (aiWins < 10){
+            opponentScoreFirstCounterTextView.setText(String.valueOf(aiWins));
+        }else {
+            String second   = String.valueOf(aiWins).substring(0 ,1);
+            String ferst = String.valueOf(aiWins).substring(1);
+            opponentScoreFirstCounterTextView.setText(ferst);
+            opponentScoreSecondCounterTextView.setText(second);
+        }
+    }
 }

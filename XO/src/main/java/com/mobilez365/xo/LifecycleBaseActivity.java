@@ -1,6 +1,5 @@
 package com.mobilez365.xo;
 
-import android.app.Activity;
 import android.media.AudioManager;
 import android.support.v4.app.FragmentActivity;
 
