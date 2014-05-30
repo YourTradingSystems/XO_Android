@@ -30,6 +30,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.Room;
+import com.mobilez365.xo.GameServiceUtil.AchievementUnlokUtil;
 import com.mobilez365.xo.GameServiceUtil.AppStateManagerUtil;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
@@ -37,6 +38,7 @@ import com.mobilez365.xo.XOApplication;
 import com.mobilez365.xo.activity.GameActivity;
 import com.mobilez365.xo.ai.FieldValue;
 import com.mobilez365.xo.ai.GameChecker;
+import com.mobilez365.xo.util.AppSettings;
 import com.mobilez365.xo.util.Constant;
 import com.mobilez365.xo.util.GlobalHelper;
 import com.squareup.picasso.Picasso;
@@ -599,6 +601,11 @@ public class OnlineGameFragment extends Fragment {
                 break;
             }
         }
+        if (AppSettings.isFerstOnlineGame(parentActivity)){
+            AchievementUnlokUtil.init(((GameActivity)parentActivity).getGameHelper().getApiClient(), parentActivity );
+            AchievementUnlokUtil.unlockBeginer();
+            AppSettings.setFerstOnlineGame(parentActivity);
+        }
         fillScoreView();
     }
 
@@ -611,8 +618,6 @@ public class OnlineGameFragment extends Fragment {
         infoYourTheyTornTextView.setText(parentActivity.getString(R.string.win_string));
 
         continueNotificationShow();
-
-
     }
 
     private void showLoseMessage(){

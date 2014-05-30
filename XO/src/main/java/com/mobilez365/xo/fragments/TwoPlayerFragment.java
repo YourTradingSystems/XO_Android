@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.Tracker;
+import com.mobilez365.xo.GameServiceUtil.AchievementUnlokUtil;
 import com.mobilez365.xo.GameServiceUtil.AppStateManagerUtil;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
@@ -339,7 +340,10 @@ public class TwoPlayerFragment extends Fragment{
     private void showEndGameDialog (int winerStatus ){
         isGameFinish = true;
 
-
+        if (winsUserOne + winsUserTwo == 10 ){
+            AchievementUnlokUtil.init(((GameActivity) parentActivity).getGameHelper().getApiClient(), parentActivity);
+            AchievementUnlokUtil.unlockFriendlyGamer();
+        }
         switch (winerStatus){
             case -1:{
                 showDrawMessage();

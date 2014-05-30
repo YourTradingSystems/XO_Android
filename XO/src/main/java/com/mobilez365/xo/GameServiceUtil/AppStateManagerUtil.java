@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.mobilez365.xo.R;
+import com.mobilez365.xo.activity.GameActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -65,6 +66,10 @@ public final class AppStateManagerUtil  {
             int score = Integer.valueOf(str);
 
             score = score + 1;
+            if(score == 10){
+                AchievementUnlokUtil.init(googleApiClient, activity );
+                AchievementUnlokUtil.unlockGamer();
+            }
             str = String.valueOf(score);
 
             byte[] lastresult = str.getBytes(Charset.forName("UTF-8"));

@@ -14,12 +14,16 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.appstate.AppState;
+import com.mobilez365.xo.GameServiceUtil.AchievementUnlokUtil;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
+import com.mobilez365.xo.activity.GameActivity;
 import com.mobilez365.xo.ai.AILevel;
 import com.mobilez365.xo.ai.AIPlayer;
 import com.mobilez365.xo.ai.FieldValue;
 import com.mobilez365.xo.ai.GameChecker;
+import com.mobilez365.xo.util.AppSettings;
 import com.mobilez365.xo.util.Constant;
 
 import java.util.Random;
@@ -170,6 +174,7 @@ public class AiFragment extends Fragment {
 
 
     private void showLoseMessage() {
+
         SoundManager.playSound(parentActivity, Constant.LOSE_SOUND);
         infoYourTheyTornTextView.setText(parentActivity.getString(R.string.lose_string));
 
@@ -177,12 +182,34 @@ public class AiFragment extends Fragment {
     }
 
     private void showWinMessage() {
+        unlockAchievement();
+
         SoundManager.playSound(parentActivity, Constant.WIN_SOUND);
         infoYourTheyTornTextView.setText(parentActivity.getString(R.string.win_string));
 
 //        continueNotificationShow();
     }
-
+    private void unlockAchievement(){
+        if (mAILevel == AILevel.Easy){
+            int lastWins = AppSettings.getEasyWins(parentActivity);
+            lastWins++;
+            if (lastWins >= 10 ){
+                AchievementUnlokUtil.init(((GameActivity)parentActivity).getGameHelper().getApiClient(), parentActivity );
+                AchievementUnlokUtil.unlockNewbie();
+            }else {
+                AppSettings.setEasyWins(parentActivity, lastWins);
+            }
+        }else if(mAILevel == AILevel.Hard){
+            int lastWins = AppSettings.getHardWins(parentActivity);
+            lastWins++;
+            if (lastWins >= 10 ){
+                AchievementUnlokUtil.init(((GameActivity)parentActivity).getGameHelper().getApiClient(), parentActivity );
+                AchievementUnlokUtil.unlockGoodPlayer();
+            }else {
+                AppSettings.setHardWins(parentActivity, lastWins);
+            }
+        }
+    }
     private void showDrawMessage() {
         SoundManager.playSound(parentActivity, Constant.LOSE_SOUND);
         infoYourTheyTornTextView.setText(parentActivity.getString(R.string.draw_game_string));

@@ -69,5 +69,33 @@ public class AppSettings {
     public static void setAnalyticsState(Context context, boolean value) {
         setBoolean(context, Constant.KEY_ANALYTICS, value);
     }
+   //region Achievement
 
+    public static void setEasyWins(Context context, int value) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putInt(Constant.PREF_NAME_EASY_WINS, value);
+        editor.commit();
+    }
+    public static int getEasyWins(Context context) {
+        return  getSharedPreferences(context).getInt(Constant.PREF_NAME_EASY_WINS, 0);
+    }
+
+    public static void setHardWins(Context context, int value) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putInt(Constant.PREF_NAME_HARD_WINS, value);
+        editor.commit();
+    }
+    public static int getHardWins(Context context) {
+        return  getSharedPreferences(context).getInt(Constant.PREF_NAME_HARD_WINS, 0);
+    }
+
+    public static void setFerstOnlineGame(Context context) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putBoolean(Constant.PREF_NAME_FIRST_ONLINEGAME, false);
+        editor.commit();
+    }
+    public static boolean isFerstOnlineGame(Context context) {
+        return  getSharedPreferences(context).getBoolean(Constant.PREF_NAME_FIRST_ONLINEGAME, true);
+    }
+    //endregion
 }
