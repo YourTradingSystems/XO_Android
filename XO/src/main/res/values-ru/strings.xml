@@ -1,0 +1,86 @@
+<resources>
+    //IDs for game service
+    <string name="achievement_newbie">CgkI7qvx050DEAIQAg</string>
+    <string name="achievement_good_player">CgkI7qvx050DEAIQBA</string>
+    <string name="achievement_beginer">CgkI7qvx050DEAIQBw</string>
+    <string name="achievement_gamer">CgkI7qvx050DEAIQCA</string>
+    <string name="achievement_friendly_gamer">CgkI7qvx050DEAIQCQ</string>
+    <string name="leader_board_id">CgkI7qvx050DEAIQBg</string>
+
+
+
+
+
+    <string name="app_name">Крестики Нолики Онлайн</string>
+    <string name="settings_label">Настройки</string>
+
+
+    <!--Main Screen Buttons text-->
+    <string name="button_one_player_string">1 Игрок</string>
+    <string name="button_two_player_string">2 Игрока</string>
+    <string name="button_online_string">Играть Онлайн</string>
+    <string name="button_about_screen">О Приложении</string>
+
+    <!--Game Service String-->
+    <string name="gamehelper_sign_in_failed">Не получилось Авторизироватсяю Пожалуйста проверьте интернет соединение и повторите попытку</string>
+    <string name="gamehelper_app_misconfigured">The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.</string>
+    <string name="gamehelper_license_failed">License check failed.</string>
+    <string name="gamehelper_unknown_error">Неизвестная ошибка :(</string>
+
+    <!--Notification Message-->
+    <string name="please_login_string">Пожалуйста Авторизируйтесь</string>
+
+    <!--Select Online Game-->
+    <string name="quick_game_string">Быстрая Игра</string>
+    <string name="invite_friend_string">Пригласить Друга</string>
+    <string name="chech_invte_string">Приглашения от Друзей</string>
+
+    <!--Select AI Level-->
+    <string name="easy_level_string">Простой</string>
+    <string name="medium_level_string">Средний</string>
+    <string name="hard_level_string">Сложный</string>
+
+    <!--Main Menu-->
+    <string name="main_menu_one_player">1 ИГРОК</string>
+    <string name="main_menu_two_player">2 ИГРОКА</string>
+    <string name="main_menu_play_online">ИГРАТЬ ОНЛАЙНE</string>
+    <string name="main_menu_about">О ПРИЛОЖЕНИИ</string>
+    <string name="main_menu_leaderboard">ЛИДЕРЫ</string>
+    <string name="main_menu_achievements">ДОСТИЖЕНИЯ</string>
+    <string name="main_menu_settings">НАСТРОЙКИ</string>
+
+    <!--Settings text-->
+    <string name="settings_sound">Звуки</string>
+    <string name="settings_music">Музыка</string>
+    <string name="settings_push">Push</string>
+    <string name="settings_analytics">Google Analytics</string>
+    <string name="settings_you_login_as_string">Вы вошли как:</string>
+
+    <!--Game Screen Strings-->
+    <string name="no_string">Нет</string>
+    <string name="yes_string">Да</string>
+    <string name="back_string">Назад</string>
+    <string name="your_torn_string">Ваша Ход!</string>
+    <string name="they_torn_string">Ход Опонента!</string>
+    <string name="win_string">Вы Победили!</string>
+    <string name="lose_string">Вы Проиграли!</string>
+    <string name="draw_game_string">Ничья!</string>
+    <string name="continue_string">Продолжить?</string>
+    <string name="opponent_left_game_string">Опонент покинул Игру!</string>
+    <string name="waiting_opponent_string">Ожидание Опонента</string>
+
+    <string name="player_string">Игрок</string>
+
+    <!--Two Player Screen-->
+    <string name="user_one_string">Игрок 1</string>
+    <string name="user_two_string">Игрок 2</string>
+    <string name="win_user_string">Выиграл </string>
+
+    <string name="about_app_string">
+        Х\\О это следующий шаг в развитии классической игры крестики нолики для Android. Скачивай себе пока он еще бесплатна!\n
+        Игроки по очереди ставят на свободные клетки поля 3х3 знаки крестик или нолик. Первый, выстроивший в ряд 3 своих фигуры по вертикали, горизонтали или диагонали, выигрывает. Первый ход делает игрок, ставящий крестики.\n
+        Вы можете соревноваться с друзами на одном устройстве или онлайн, или с случайными игроками по всему миру, испытать себя и стать лучшим игроком мира. А также вы можете играть против телефона с двумя уровнями сложности.\n
+        Перестаньте попусту выкидывать бумагу. Скачайте игру крестики нолики на ваш смартфон пока она еще бесплатная.\n
+        Х\\О это лучшая игра для детей и взрослых, мальчишек и девчонок. Эта игра также известна как крестики нолики, логическая игра, головоломка, бумажные игры
+    </string>
+</resources>

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.util.Constant;
 
@@ -18,11 +20,12 @@ public class SelectOnePlayerFragment extends Fragment implements View.OnClickLis
 
     private Button btnEasy, btnMedium, btnHard;
     private View rootView;
-    
+    private InterstitialAd interstitial;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_choice_one_player, container, false);
         initAllView();
+        initAds();
         return rootView;
     }
 
@@ -34,6 +37,31 @@ public class SelectOnePlayerFragment extends Fragment implements View.OnClickLis
         btnEasy.setOnClickListener(this);
         btnMedium.setOnClickListener(this);
         btnHard.setOnClickListener(this);
+    }
+    private void initAds(){
+        interstitial = new InterstitialAd(getActivity());
+        interstitial.setAdUnitId(Constant.MY_AD_UNIT_ID);
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Запуск загрузки межстраничного объявления.
+        interstitial.loadAd(adRequest);
+    }
+    public void displayInterstitial() {
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        displayInterstitial();
     }
 
     @Override

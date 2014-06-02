@@ -45,9 +45,11 @@
             android:gravity="center_vertical"
             android:textColor="@color/text_color"
             android:paddingLeft="30dp"
+            android:visibility="gone"
             android:paddingRight="30dp"/>
 
         <CheckedTextView
+            android:visibility="gone"
             android:id="@+id/activity_preferences_analytics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

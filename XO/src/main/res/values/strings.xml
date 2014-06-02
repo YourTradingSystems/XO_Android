@@ -11,7 +11,7 @@
 
 
 
-    <string name="app_name">XO</string>
+    <string name="app_name">Tic Tac Toe</string>
     <string name="settings_label">Settings</string>
 
 
@@ -75,5 +75,14 @@
     <string name="user_one_string">Player 1</string>
     <string name="user_two_string">Player 2</string>
     <string name="win_user_string">Win</string>
+
+    <string name="about_app_string">
+        X\\O is the next step of the classic tic tac toe game for Android. Get it now while it\'s free!\n
+        This incredibly popular game is also known as Noughts and Crosses (Naughts and Crosses), TicTacToe, Tick tack toe, X and O (Xs and Os), OXO, Tic-tac-toe or Tit-tat-toe.\n
+        In Tic Tac Toe, two players take turns marking the spaces in a 3x3 grid with X and O marks. The player who succeeds in placing three respective marks in a vertical, horizontal or diagonal row wins the game.\n
+        You can play with your friends, invite them to the game or challenge random players detect your ability and power and be one of top players in the world. Also you can play with phone, which have 2 levels :easy and hard. You can play with your friends on the same device.\n
+        Stop wasting paper. Download this game now and play Tic Tac Toe on your Android device for free!\n
+        X\\O is the best free game for kids, boys and girls. Fun for adults too! Also known as: noughts nad crosses, linea, raya, cero, x\'s and o\'s, pencil and paper games, free puzzle games. Common misspellings: tick tack toe, naughts and crosses, tic tak toe, tick tock toe, tic tac to, x, o, xx, oo, xxx, ooo, xo, xoxo, xoxoxo
+    </string>
 
 </resources>

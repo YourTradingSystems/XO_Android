@@ -64,14 +64,14 @@ public class GameActivity extends BaseGameActivity {
     final static int RC_SELECT_PLAYERS = 10000;
     // request code (can be any number, as long as it's unique)
     final  static int RC_INVITATION_INBOX = 10001;
-    private InterstitialAd interstitial;
+
 
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
         setContentView(R.layout.activity_game);
 
-        initAds();
+
 
         int fragmentType  = getIntent().getIntExtra("screenType", -1);
         setFragment(fragmentType, null);
@@ -82,6 +82,7 @@ public class GameActivity extends BaseGameActivity {
     public void onBackPressed() {
         if (fragment instanceof OnlineGameFragment) {
             Games.RealTimeMultiplayer.leave(getApiClient(), xoRoomUpdateListener, mXORoomID);
+            setFragment(Constant.SCREEN_TYPE_ONLINE, null);
         }else if (fragment instanceof AiFragment) {
             setFragment(Constant.SCREEN_TYPE_ONE_PLAYER, null);
         }else if(fragment instanceof TwoPlayerFragment) {
@@ -93,19 +94,7 @@ public class GameActivity extends BaseGameActivity {
         }
 
     }
-    private void initAds(){
-        interstitial = new InterstitialAd(this);
-        interstitial.setAdUnitId(Constant.MY_AD_UNIT_ID);
-        AdRequest adRequest = new AdRequest.Builder().build();
 
-        // Запуск загрузки межстраничного объявления.
-        interstitial.loadAd(adRequest);
-    }
-    public void displayInterstitial() {
-        if (interstitial.isLoaded()) {
-            interstitial.show();
-        }
-    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -149,17 +138,16 @@ public class GameActivity extends BaseGameActivity {
 
         switch (fragmentType) {
             case Constant.SCREEN_TYPE_ONE_PLAYER: {
-                displayInterstitial();
+
                 fragment = new SelectOnePlayerFragment();
                 break;
             }
             case Constant.SCREEN_TYPE_TWO_PLAYER: {
-                displayInterstitial();
                 fragment = new TwoPlayerFragment();
                 break;
             }
             case Constant.SCREEN_TYPE_ONLINE: {
-                displayInterstitial();
+
                 fragment = new SelectOnlineGameFragment();
                 break;
             }
@@ -491,19 +479,19 @@ public class GameActivity extends BaseGameActivity {
                 }
             }
             else if (intent.getAction().equals(Constant.FILTER_VIEW_EASY)) {
-                displayInterstitial();
+
                 Bundle bundle = new Bundle();
                 bundle.putInt(Constant.INTENT_KEY_AI_LEVEL, Constant.AI_EASY);
                 setFragment(Constant.SCREEN_AI_GAME, bundle);
             }
             else if (intent.getAction().equals(Constant.FILTER_VIEW_MEDIUM)) {
-                displayInterstitial();
+
                 Bundle bundle = new Bundle();
                 bundle.putInt(Constant.INTENT_KEY_AI_LEVEL, Constant.AI_MEDIUM);
                 setFragment(Constant.SCREEN_AI_GAME, bundle);
             }
             else if (intent.getAction().equals(Constant.FILTER_VIEW_HARD)) {
-                displayInterstitial();
+
                 Bundle bundle = new Bundle();
                 bundle.putInt(Constant.INTENT_KEY_AI_LEVEL, Constant.AI_HARD);
                 setFragment(Constant.SCREEN_AI_GAME, bundle);

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.mobilez365.xo.R;
@@ -25,11 +27,12 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
     private View rootView;
     private Tracker traker;
     private Activity parentActivity;
+    private InterstitialAd interstitial;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_choice_online_game_layout, container, false);
-
+        initAds();
         // Get tracker.
         traker= ((XOApplication)getActivity().getApplication()).getTracker(
                 XOApplication.TrackerName.APP_TRACKER);
@@ -37,6 +40,26 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
         initAllView();
         parentActivity = getActivity();
         return rootView;
+    }
+
+    private void initAds(){
+        interstitial = new InterstitialAd(getActivity());
+        interstitial.setAdUnitId(Constant.MY_AD_UNIT_ID);
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Запуск загрузки межстраничного объявления.
+        interstitial.loadAd(adRequest);
+    }
+    public void displayInterstitial() {
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        displayInterstitial();
     }
 
     private void initAllView(){

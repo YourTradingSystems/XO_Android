@@ -14,6 +14,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.analytics.Tracker;
 import com.mobilez365.xo.GameServiceUtil.AchievementUnlokUtil;
 import com.mobilez365.xo.GameServiceUtil.AppStateManagerUtil;
@@ -50,12 +52,13 @@ public class TwoPlayerFragment extends Fragment{
     private boolean isUserOneTurn;
     private boolean isGameFinish;
     private String winnerInThisRound;
-
+    private InterstitialAd interstitial;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
         parentActivity = getActivity();
+        initAds();
         initGame();
         initialAllView();
 
@@ -65,6 +68,25 @@ public class TwoPlayerFragment extends Fragment{
         fillPlayersData();
         initialGameField();
         return rootView;
+    }
+    private void initAds(){
+        interstitial = new InterstitialAd(parentActivity);
+        interstitial.setAdUnitId(Constant.MY_AD_UNIT_ID);
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Запуск загрузки межстраничного объявления.
+        interstitial.loadAd(adRequest);
+    }
+    public void displayInterstitial() {
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        displayInterstitial();
     }
 
     private void initGame() {

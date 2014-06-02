@@ -31,7 +31,7 @@ public class AppSettings {
 
     public static boolean isSoundEnabled(Context context) {
         if (!getSharedPreferences(context).contains(Constant.KEY_SOUND_EFFECTS)) {
-            setBoolean(context, Constant.KEY_SOUND_EFFECTS, false);
+            setBoolean(context, Constant.KEY_SOUND_EFFECTS, true);
         }
         return getSharedPreferences(context).getBoolean(Constant.KEY_SOUND_EFFECTS, false);
     }
@@ -42,7 +42,7 @@ public class AppSettings {
 
     public static boolean isMusicEnabled(Context context) {
         if (!getSharedPreferences(context).contains(Constant.KEY_BACKGROUND_MUSIC)) {
-            setBoolean(context, Constant.KEY_BACKGROUND_MUSIC, false);
+            setBoolean(context, Constant.KEY_BACKGROUND_MUSIC, true);
         }
         return getSharedPreferences(context).getBoolean(Constant.KEY_BACKGROUND_MUSIC, false);
     }

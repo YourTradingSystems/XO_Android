@@ -706,6 +706,7 @@ public class OnlineGameFragment extends Fragment {
         }
     }
     private void initNewGame(){
+        isGameFinish = false;
         initMySign();
         fillDataInView();
         initFieldValues();
