@@ -24,9 +24,7 @@ import com.mobilez365.xo.XOApplication.*;
 import com.mobilez365.xo.util.Constant;
 import com.startad.lib.SADView;
 
-
-
-
+import java.util.Locale;
 
 
 /**
@@ -57,11 +55,18 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         LinearLayout layout = (LinearLayout)findViewById(R.id.main_activity_adsPanel);
 
+
+
+
         // Add the adView to it
         layout.addView(this.sadView);
 
         //Load ad for currently active language in app
-        this.sadView.loadAd(SADView.LANGUAGE_EN);
+        if(Locale.getDefault().getLanguage().equals("ru")){
+            this.sadView.loadAd(SADView.LANGUAGE_RU);
+        }else {
+            this.sadView.loadAd(SADView.LANGUAGE_EN);
+        }
          //or this.sadView.loadAd(SADView.LANGUAGE_RU);
         SoundManager.initSound(this, Constant.CLICK_SOUND);
         initAllView();
