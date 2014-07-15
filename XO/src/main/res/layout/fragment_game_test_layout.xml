@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             />
+
         <TextView
             android:id="@+id/timer_text_view_game_fragment_test"
             android:layout_width="wrap_content"
