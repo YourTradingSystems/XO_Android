@@ -751,7 +751,7 @@ public class AiFragment extends Fragment {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
 
-                    if(!isGameFinish){
+                    if(!isGameFinish&&isMyTurn){
 
                         if (mySign == Constant.MY_SYMBOLE_X){
                             SoundManager.playSound(parentActivity, Constant.GOES_X__SOUND);

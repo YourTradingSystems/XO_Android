@@ -79,6 +79,10 @@ public class Constant {
     public static final String INTENT_KEY_IS_GAME_CONTINUE= "com.mobilez365.xo.INTENT_KEY_IS_GAME_CONTINUE";
     public static final String INTENT_KEY_AI_LEVEL= "com.mobilez365.xo.INTENT_KEY_AI_LEVEL";
 
+    public static final String INTENT_KEY_WAS_INVITED="com.mobilez365.xo.INTENT_KEY_WAS_INVITED";//taras
+    public static final String INTENT_KEY_INVITOR="com.mobilez365.xo.INTENT_KEY_INVITOR";//taras
+    public static final String INTENT_KEY_IS_GAME_OF_TRUTH="com.mobilez365.xo.INTENT_KEY_IS_GAME_OF_TRUTH";//taras
+
     //Simbol Identificator
     public static final int MY_SYMBOLE_O = 0;
     public static final int MY_SYMBOLE_X = 1;

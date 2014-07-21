@@ -51,7 +51,10 @@ public class GameActivity extends BaseGameActivity {
     private String mXORoomID;
     private Fragment fragment;
     private String mMyPartisipientId;
+    private String mInvitedPartisipientId;
     private boolean isFierstMessage = true;
+
+    private boolean isGameOfTruth = false; //taras  if true = game of truth else quick game
 
     private int myRandom365;
     private boolean isMyTurn;
@@ -167,6 +170,11 @@ public class GameActivity extends BaseGameActivity {
     }
 
     private void startQuickGame() {
+
+        mMyPartisipientId=null;//taras
+        mInvitedPartisipientId=null;//taras
+        isGameOfTruth=false;//taras
+
         xoRoomUpdateListener = new XORoomUpdateListener();
         xoRealTimeMessageReceivedListener = new XORealTimeMessageReceivedListener();
         xoRoomStatusUpdateListener = new XORoomStatusUpdateListener();
@@ -188,6 +196,7 @@ public class GameActivity extends BaseGameActivity {
         // go to game screen
     }
     private void inviteFriend() {
+
         xoRoomUpdateListener = new XORoomUpdateListener();
         xoRealTimeMessageReceivedListener = new XORealTimeMessageReceivedListener();
         xoRoomStatusUpdateListener = new XORoomStatusUpdateListener();
@@ -259,11 +268,14 @@ public class GameActivity extends BaseGameActivity {
             Invitation invitation =
                     extras.getParcelable(Multiplayer.EXTRA_INVITATION);
 
+            mMyPartisipientId = invitation.getInviter().getParticipantId();//taras
+
             // accept it!
             RoomConfig roomConfig = makeBasicRoomConfigBuilder()
                     .setInvitationIdToAccept(invitation.getInvitationId())
                     .build();
             Games.RealTimeMultiplayer.join(getApiClient(), roomConfig);
+
 
             // prevent screen from sleeping during handshake
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -357,6 +369,16 @@ public class GameActivity extends BaseGameActivity {
                 mParticipants = room.getParticipants();
                 mXORoomID = room.getRoomId();
 
+                //taras s
+                for (Participant p : mParticipants)
+                {
+                    if(!p.getParticipantId().equals(mMyPartisipientId))
+                    {
+                        mInvitedPartisipientId = p.getParticipantId();
+                    }
+                }
+                //taras e
+
                 mXORoom = room;
 
                 sendMessageToAllInRoom(String.valueOf(myRandom365));
@@ -418,8 +440,6 @@ public class GameActivity extends BaseGameActivity {
 
         }
 
-
-
         @Override
         public void onConnectedToRoom(Room room) {
 
@@ -445,10 +465,11 @@ public class GameActivity extends BaseGameActivity {
     private void startGameOfTruth() {
         Bundle bundle = new Bundle();
         bundle.putBoolean(Constant.INTENT_KEY_IS_MY_TURN, isMyTurn);
-        setFragment(Constant.SCREEN_TYPE_ONLINE_GAME , bundle);
+        bundle.putString(Constant.INTENT_KEY_WAS_INVITED,mInvitedPartisipientId);//taras
+        bundle.putString(Constant.INTENT_KEY_INVITOR,mMyPartisipientId);//taras
 
-
-
+        bundle.putBoolean(Constant.INTENT_KEY_IS_GAME_OF_TRUTH,isGameOfTruth);
+        setFragment(Constant.SCREEN_TYPE_ONLINE_GAME, bundle);
 
     }
 
@@ -459,12 +480,15 @@ public class GameActivity extends BaseGameActivity {
 
             if (intent.getAction().equals(Constant.FILTER_START_QUICK_GAME)) {
                 setMyRandom365();
+                isGameOfTruth=false;
                 startQuickGame();
             }else if(intent.getAction().equals(Constant.FILTER_PLAY_WITH_FRIEND)){
                 setMyRandom365();
+                isGameOfTruth=true;
                 inviteFriend();
             }else if(intent.getAction().equals(Constant.FILTER_VIEW_INVETATION)){
                 viewInvitation();
+                isGameOfTruth=true;
 
             } else if(intent.getAction().equals(Constant.FILTER_SEND_MY_STROK)){
                 String message = intent.getStringExtra(Constant.INTENT_KEY_MY_STROK);
@@ -566,6 +590,5 @@ public class GameActivity extends BaseGameActivity {
             }
 
         }
-
     }
 }
