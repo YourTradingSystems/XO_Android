@@ -1,43 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/about_bg"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"/>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="57dp"
+        android:layout_margin="1dp"
+        >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
+         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/about_bg"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                />
+              >
 
-            <TextView
+
+
+           <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/about_app_string"
                 android:id="@+id/avtivity_about_temp"
-                android:layout_gravity="center"
-
+                android:layout_gravity="top"
                 android:textColor="@android:color/black"
-                android:padding="50dp"
-                android:layout_margin="10dp"/>
-            <!--android:layout_centerInParent="true"-->
+
+                        android:layout_margin="1dp" />
+            <!--android:layout_centerInParent="true"
+              android:background="@drawable/about_bg"-->
+
+
             </RelativeLayout>
-
-
 
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>
+
+
+
+

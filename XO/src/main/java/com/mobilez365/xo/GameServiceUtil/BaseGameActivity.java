@@ -1,6 +1,9 @@
 package com.mobilez365.xo.GameServiceUtil;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -98,6 +101,13 @@ public abstract class BaseGameActivity extends LifecycleBaseActivity implements
 
     public boolean isSignedIn() {
         return mHelper.isSignedIn();
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     protected void beginUserInitiatedSignIn() {

@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -173,7 +175,7 @@ public class GameActivity extends BaseGameActivity {
 
         mMyPartisipientId=null;//taras
         mInvitedPartisipientId=null;//taras
-        isGameOfTruth=false;//taras
+
 
         xoRoomUpdateListener = new XORoomUpdateListener();
         xoRealTimeMessageReceivedListener = new XORealTimeMessageReceivedListener();
@@ -484,7 +486,7 @@ public class GameActivity extends BaseGameActivity {
                 startQuickGame();
             }else if(intent.getAction().equals(Constant.FILTER_PLAY_WITH_FRIEND)){
                 setMyRandom365();
-                isGameOfTruth=true;
+                isGameOfTruth=false;
                 inviteFriend();
             }else if(intent.getAction().equals(Constant.FILTER_VIEW_INVETATION)){
                 viewInvitation();
@@ -591,4 +593,6 @@ public class GameActivity extends BaseGameActivity {
 
         }
     }
+
+
 }

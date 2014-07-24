@@ -28,6 +28,8 @@
 
     <!--Notification Message-->
     <string name="please_login_string">Пожалуйста Авторизируйтесь</string>
+    <string name="please_enable_network">Пожалуйста Включите интернет</string>
+    <string name="please_enable_network_and_login">Пожалуйста Включите интернет и Авторизируйтесь</string>
 
     <!--Select Online Game-->
     <string name="quick_game_string">Быстрая Игра</string>

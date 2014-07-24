@@ -29,6 +29,8 @@
 
     <!--Notification Message-->
     <string name="please_login_string">Please Log In</string>
+    <string name="please_enable_network">Please Enable Networking</string>
+    <string name="please_enable_network_and_login">Please Enable Networking and Log In</string>
 
     <!--Select Online Game-->
     <string name="quick_game_string">Quick Game</string>

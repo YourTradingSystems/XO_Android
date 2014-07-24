@@ -2,6 +2,8 @@ package com.mobilez365.xo.activity;
 
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -161,16 +163,37 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 break;
             }
             case R.id.main_activity_leaderboard:{
-                if(isSignedIn()){
+                if(isSignedIn() && isNetworkAvailable()){
                     sendScreenView(Constant.SCREEN_LEADER_BOARD);
                     startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getApiClient(), getString(R.string.leader_board_id)), 2);
+                }else {
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                    alertDialog.setMessage(getResources().getString(R.string.please_enable_network_and_login));
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // here you can add functions
+                        }
+                    });
+                    //    alertDialog.setIcon(R.drawable.icon);
+                    alertDialog.show();
                 }
                 break;
             }
             case R.id.main_activity_achievements:{
-                if(isSignedIn()){
+                if(isSignedIn()&& isNetworkAvailable()){
                     sendScreenView(Constant.SCREEN_ACHIEVEMENTS);
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), 1);
+                } else {
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                   // alertDialog.setTitle("Warning!");
+                    alertDialog.setMessage(getResources().getString(R.string.please_enable_network_and_login));
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // here you can add functions
+                        }
+                    });
+                    //    alertDialog.setIcon(R.drawable.icon);
+                    alertDialog.show();
                 }
                 break;
             }

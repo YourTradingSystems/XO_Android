@@ -1,6 +1,10 @@
 package com.mobilez365.xo;
 
+
+import android.content.Context;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.FragmentActivity;
 
 import com.mobilez365.xo.util.Constant;
@@ -48,4 +52,6 @@ public class LifecycleBaseActivity extends FragmentActivity {
             SoundManager.pauseBackgroundMusic();
         }
     }
+
+
 }

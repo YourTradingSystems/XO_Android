@@ -211,7 +211,7 @@ public class AiFragment extends Fragment {
         if (mAILevel == AILevel.Easy){
             int lastWins = AppSettings.getEasyWins(parentActivity);
             lastWins++;
-            if (lastWins >= 10 ){
+            if (lastWins >= 10 && ((GameActivity) parentActivity).isSignedIn()  ){
                 AchievementUnlokUtil.init(((GameActivity)parentActivity).getGameHelper().getApiClient(), parentActivity );
                 AchievementUnlokUtil.unlockNewbie();
             }else {
@@ -220,7 +220,7 @@ public class AiFragment extends Fragment {
         }else if(mAILevel == AILevel.Hard){
             int lastWins = AppSettings.getHardWins(parentActivity);
             lastWins++;
-            if (lastWins >= 10 ){
+            if (lastWins >= 10 && ((GameActivity) parentActivity).isSignedIn()){
                 AchievementUnlokUtil.init(((GameActivity)parentActivity).getGameHelper().getApiClient(), parentActivity );
                 AchievementUnlokUtil.unlockGoodPlayer();
             }else {

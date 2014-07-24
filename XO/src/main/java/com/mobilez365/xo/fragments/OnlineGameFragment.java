@@ -80,6 +80,8 @@ public class OnlineGameFragment extends Fragment {
     private Bitmap winLineBitmap;
     private  int winLine=0; //(=1,2,3,4,5,6,7,8 or 0)
     private  boolean gameType; // true - game og trurh / fallse = quick game
+    HashMap<String,Bitmap> id_and_img;
+    String user_id;
 
     private String isGameContinueByMe, isGameContinueByOpponent =  new String();
 
@@ -173,11 +175,40 @@ public class OnlineGameFragment extends Fragment {
     }
 
 
+
     @Override
     public void onPause() {
+        meLeftGAme();
+
+
         if (mIntReceiver != null)
             parentActivity.unregisterReceiver(mIntReceiver);
         super.onPause();
+    }
+
+    private void meLeftGAme() {
+        //when press power butt
+        isGameContinueByMe="no";
+        //  isGameContinueByOpponent="yes";
+        oponentWinsThisGame++;
+        fillScoreView();
+
+        isMyTurn=true;
+        isGameFinish=true;
+        SoundManager.playSound(parentActivity, Constant.LOSE_SOUND);
+        infoYourTheyTornTextView.setText(parentActivity.getString(R.string.lose_string));
+        noContinueButton.setText(parentActivity.getString(R.string.back_string));
+        noContinueButton.setOnClickListener(new NoOnClickButtonListener());
+        noContinueButton.setVisibility(View.VISIBLE);
+        yesContinueButton.setVisibility(View.INVISIBLE);
+        if (waitinTimer != null){
+            waitinTimer.cancel();
+        }
+
+        if(gameTimer != null){
+            gameTimer.cancel();
+        }
+        // checkOpponentOpinion();
     }
 
     private void initialAllView() {
@@ -298,14 +329,13 @@ public class OnlineGameFragment extends Fragment {
             ArrayList<Participant> mParticipants = room.getParticipants();
 
                 // start taras
-
+        if(!gameType) {
             for (Participant p : mParticipants) {
                 if (!p.getParticipantId().equals(room.getCreatorId())) {
 
-                       oponentUserNameTextView.setText(p.getDisplayName());
-                   // setAvatar(p.getIconImageUrl(),oponentAvatarImageView );
+                    oponentUserNameTextView.setText(p.getDisplayName());
 
-                       String photoLinkGPlus = p.getIconImageUrl();
+                    String photoLinkGPlus = p.getIconImageUrl();
 
                     Picasso.with(parentActivity).load(photoLinkGPlus).into(new Target() {
 
@@ -330,8 +360,6 @@ public class OnlineGameFragment extends Fragment {
 
                     myUserNameTextView.setText(p.getDisplayName());
 
-                   // setAvatar(p.getIconImageUrl(),myAvatarImageView );
-
                     String photoLinkGPlus = p.getIconImageUrl();
 
                     Picasso.with(parentActivity).load(photoLinkGPlus).into(new Target() {
@@ -354,18 +382,16 @@ public class OnlineGameFragment extends Fragment {
                 }
 
             }
-
+        }
             if(gameType) {
+
                 for (Participant p : mParticipants) {
                     if (p.getParticipantId().equals(mWasInvitedID) && !p.getParticipantId().equals(room.getCreatorId())) {
                         Participant p_temp = p;
-                        // oponentUserNameTextView.setText(myUserNameTextView.getText().toString());
-                        // oponentAvatarImageView.setImageDrawable(myAvatarImageView.getDrawable());
+
                         for (Participant p1 : mParticipants) {
                             if (!p_temp.getParticipantId().equals(p1.getParticipantId())) {
                                 oponentUserNameTextView.setText(p1.getDisplayName());
-
-                              //  setAvatar(p1.getIconImageUrl(),oponentAvatarImageView );
 
                                String photoLinkGPlus = p1.getIconImageUrl();
 
@@ -374,6 +400,9 @@ public class OnlineGameFragment extends Fragment {
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                         oponentAvatarImageView.setImageBitmap(GlobalHelper.getRoundedShape(bitmap));
+    //                            oponentAvatarImageView.setImageBitmap(id_and_img.get(p1.getParticipantId().toString()));
+                                        oponentUserNameTextView.requestLayout();
+                                        oponentAvatarImageView.requestLayout();
                                     }
 
                                     @Override
@@ -388,9 +417,6 @@ public class OnlineGameFragment extends Fragment {
                                 });
 
                                 myUserNameTextView.setText(p.getDisplayName());
-                                // myAvatarImageView.setImageDrawable(oponentAvatarImageView.getDrawable());
-
-                                //setAvatar(p.getIconImageUrl(),myAvatarImageView );
 
                                 String photoLinkGPlus1 = p.getIconImageUrl();
 
@@ -399,6 +425,9 @@ public class OnlineGameFragment extends Fragment {
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                         myAvatarImageView.setImageBitmap(GlobalHelper.getRoundedShape(bitmap));
+                                   //   myAvatarImageView.setImageBitmap(id_and_img.get(p.getParticipantId().toString()));
+                                        myAvatarImageView.requestLayout();
+                                        myUserNameTextView.requestLayout();
                                     }
 
                                     @Override
@@ -442,7 +471,6 @@ public class OnlineGameFragment extends Fragment {
                 }
             }
                 //end
-
 
                /*
                 for (Participant p : mParticipants) {
@@ -831,7 +859,10 @@ private void writWinRedLine(Bundle bundle) {
                 isGameContinueByOpponent = oponentStrok;
                 checkOpponentOpinion();
             }else if(intent.getAction().equals(Constant.FF_OPPONENT_LEFT_GAME)){
+              //  Toast.makeText(rootView.getContext(), R.string.opponent_left_game_string,Toast.LENGTH_LONG).show();
                 myWinsThisGame++;
+                isGameFinish=true;
+                fillScoreView();
 
                 AppStateManagerUtil.updateOlineProgressAppState();
                 SoundManager.playSound(parentActivity, Constant.WIN_SOUND);
@@ -841,6 +872,13 @@ private void writWinRedLine(Bundle bundle) {
                 continueTextView.setText(parentActivity.getString(R.string.opponent_left_game_string));
                 noContinueButton.setText(parentActivity.getString(R.string.back_string));
                 yesContinueButton.setVisibility(View.INVISIBLE);
+                if (waitinTimer != null){
+                    waitinTimer.cancel();
+                }
+
+                if(gameTimer != null){
+                    gameTimer.cancel();
+                }
             }
         }
     }
@@ -935,6 +973,22 @@ private void writWinRedLine(Bundle bundle) {
         continueTextView.setVisibility(View.VISIBLE);
     }
 
+        //taras
+    private void continueNotificationShowForleftUser(){
+
+//        continueTextView.setText(parentActivity.getString(R.string.opponent_left_game_string));
+//        noContinueButton.setText(parentActivity.getString(R.string.back_string));
+//        yesContinueButton.setVisibility(View.INVISIBLE);
+        noContinueButton.setOnClickListener(new NoOnClickButtonListener());
+        noContinueButton.setVisibility(View.VISIBLE);
+
+        yesContinueButton.setOnClickListener(new YesOnClickButtonListener());
+        yesContinueButton.setVisibility(View.VISIBLE);
+
+        continueTextView.setText(parentActivity.getString(R.string.continue_string));
+        continueTextView.setVisibility(View.VISIBLE);
+    }
+
     private class YesOnClickButtonListener implements View.OnClickListener{
 
         @Override
@@ -961,9 +1015,13 @@ private void writWinRedLine(Bundle bundle) {
 
 
     private void cancelGame(){
+
         Intent intent =  new Intent(Constant.FILTER_IS_GAME_CONTINUE);
         intent.putExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE, "no" );
         parentActivity.sendBroadcast(intent);
+//        if(!isMyTurn ) {
+//            Toast.makeText(parentActivity.getApplicationContext(), R.string.opponent_left_game_string, Toast.LENGTH_LONG).show();
+//        }
     }
 
     private class NoOnClickButtonListener implements View.OnClickListener{
@@ -974,6 +1032,7 @@ private void writWinRedLine(Bundle bundle) {
             if (waitinTimer != null){
                 waitinTimer.cancel();
             }
+
             SoundManager.playSound(parentActivity, Constant.CLICK_SOUND);
         }
     }
@@ -985,11 +1044,15 @@ private void writWinRedLine(Bundle bundle) {
 
     private void checkOpponentOpinion() {
         if (isGameContinueByOpponent != null && isGameContinueByMe != null){
-            waitinTimer.cancel();
+
+            if (waitinTimer != null) {
+                waitinTimer.cancel();
+            }
             if (isGameContinueByOpponent.equals("yes") && isGameContinueByMe.equals("yes")){
 
                 initNewGame();
             } else if (isGameContinueByOpponent.equals("no")){
+                Toast.makeText(parentActivity.getApplicationContext(), R.string.opponent_left_game_string,Toast.LENGTH_LONG).show();
                 Intent intent =  new Intent(Constant.FILTER_IS_GAME_CONTINUE);
                 intent.putExtra(Constant.INTENT_KEY_IS_GAME_CONTINUE, "no" );
                 parentActivity.sendBroadcast(intent);
@@ -1045,6 +1108,12 @@ private void writWinRedLine(Bundle bundle) {
                 timerTextView.setText(String.valueOf(timerCountToStrock));
                 gameTimer.cancel();
                 endGameByTimer();
+                isGameFinish=true;
+                if(!isMyTurn ) {
+                    Toast.makeText(parentActivity.getApplicationContext(), R.string.opponent_left_game_string, Toast.LENGTH_LONG).show();
+                }
+                cancelGame();
+
 
             }
             timerCountToStrock = timerCountToStrock - 1;
@@ -1082,6 +1151,10 @@ private void writWinRedLine(Bundle bundle) {
                 timerTextView.setText(String.valueOf(timerCountToContinueGame));
                 waitinTimer.cancel();
                 cancelGame();
+
+
+
+
              //   winLineBitmap=null;//////taras
             }
             timerCountToContinueGame = timerCountToContinueGame - 1;

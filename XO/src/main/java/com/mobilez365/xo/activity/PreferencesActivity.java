@@ -63,6 +63,7 @@ public class PreferencesActivity extends BaseGameActivity implements View.OnClic
         if (v.getId() == R.id.activity_preferences_signin_signout){
             if (isSignedIn()){
                 signOut();
+                buttonLoginLogout.setText(R.string.common_signin_button_text_long);
             }  else {
                 beginUserInitiatedSignIn();
             }
@@ -101,5 +102,7 @@ public class PreferencesActivity extends BaseGameActivity implements View.OnClic
     @Override
     public void onSignInSucceeded() {
         buttonLoginLogout.setText(getString(R.string.settings_you_login_as_string)+Plus.PeopleApi.getCurrentPerson(mHelper.getApiClient()).getDisplayName());
+
     }
+
 }

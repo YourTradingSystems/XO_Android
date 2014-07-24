@@ -1,18 +1,26 @@
 package com.mobilez365.xo.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.mobilez365.xo.LifecycleBaseActivity;
 import com.mobilez365.xo.R;
 import com.mobilez365.xo.SoundManager;
 import com.mobilez365.xo.XOApplication;
@@ -77,7 +85,7 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         int id =  v.getId();
-        if (((GameActivity)parentActivity).isSignedIn()) {
+        if (((GameActivity)parentActivity).isSignedIn() &&((GameActivity)parentActivity).isNetworkAvailable() ) {
             switch (id) {
                 case R.id.quick_game_button: {
                     sendScreenView(Constant.SCREEN_QUICK_GAME);
@@ -96,7 +104,16 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
                 }
             }
         }else {
-
+            AlertDialog alertDialog = new AlertDialog.Builder(rootView.getContext()).create();
+            //alertDialog.setTitle("Warning!");
+            alertDialog.setMessage(getResources().getString(R.string.please_enable_network));
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+               public void onClick(DialogInterface dialog, int which) {
+                    // here you can add functions
+               }
+           });
+        //    alertDialog.setIcon(R.drawable.icon);
+            alertDialog.show();
         }
 
         SoundManager.playSound(getActivity(), Constant.CLICK_SOUND);
@@ -122,4 +139,6 @@ public class SelectOnlineGameFragment extends Fragment implements View.OnClickLi
     private void startQuickGame() {
         getActivity().sendBroadcast(new Intent(Constant.FILTER_START_QUICK_GAME));
     }
+
+
 }

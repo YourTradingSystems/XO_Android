@@ -387,7 +387,7 @@ winChecker();
     private void showEndGameDialog (int winerStatus ){
         isGameFinish = true;
 
-        if (winsUserOne + winsUserTwo == 10 ){
+        if (winsUserOne + winsUserTwo == 10 && ((GameActivity) parentActivity).isSignedIn() ){
             AchievementUnlokUtil.init(((GameActivity) parentActivity).getGameHelper().getApiClient(), parentActivity);
             AchievementUnlokUtil.unlockFriendlyGamer();
         }
